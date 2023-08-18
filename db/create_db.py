@@ -17,8 +17,7 @@ def create_tables():
             name TEXT NOT NULL, 
             update_date TEXT NOT NULL,
             general_winrate REAL NOT NULL,
-            strength_set TEXT NOT NULL,            
-            position_set TEXT NOT NULL,
+            roles_set TEXT NOT NULL,
             image_path TEXT NOT NULL
         )
     """
@@ -27,6 +26,7 @@ def create_tables():
             hero_id INTEGER,
             hero_id_enemy INTEGER,
             winrate REAL NOT NULL,
+            update_date TEXT NOT NULL,
             FOREIGN KEY(hero_id) REFERENCES hero(id),
             FOREIGN KEY(hero_id_enemy) REFERENCES hero(id)
         )
