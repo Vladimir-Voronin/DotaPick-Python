@@ -1,11 +1,9 @@
 import requests
-from pathlib import Path
 import shutil
-import wget
+from pathlib import Path
 from bs4 import BeautifulSoup
-
 from model.models import Hero
-from utils.general import get_root_dir, get_resources_dir
+from utils.general import get_resources_dir
 
 DOTABUFF_LINK_PREFIX = r"https://dotabuff.com/"
 DOTABUFF_ALL_HEROES_LINK = r"https://dotabuff.com/heroes/"
@@ -45,6 +43,11 @@ def add_general_winrate_info_to_hero_list(hero_list):
     """ add general_winrate attribute to hero_list in-place. """
 
     soup = get_dotabuff_soup(DOTABUFF_ALL_HEROES_WINRATE_LINK)
+
+    date_param = soup.find_all('option', attrs={'value': lambda val: val.startswith("patch")})
+    date_param = date_param[0]['value']
+
+    soup = get_dotabuff_soup(DOTABUFF_ALL_HEROES_WINRATE_LINK + f"?date={date_param}")
 
     for hero in hero_list:
         cell = soup.find("td", attrs={'class': 'cell-icon', 'data-value': f"{hero.name}"})
@@ -92,5 +95,6 @@ def create_hero_list_and_make_assignments():
 
 
 if __name__ == '__main__':
-    hero_list = get_list_of_hero_only_names()
-    download_default_images_for_hero_list(hero_list)
+    # hero_list = get_list_of_hero_only_names()
+    # download_default_images_for_hero_list(hero_list)
+    pass
