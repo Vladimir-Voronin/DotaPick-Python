@@ -9,3 +9,7 @@ def get_root_dir():
 
 def get_resources_dir():
     return get_root_dir() / Path('resources')
+
+
+def get_dotapick_db_file():
+    return get_root_dir() / Path(r'db/dotapick.db')
