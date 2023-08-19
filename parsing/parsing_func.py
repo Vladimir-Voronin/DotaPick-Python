@@ -1,7 +1,11 @@
+import contextlib
+
 import requests
 import shutil
 from pathlib import Path
 from bs4 import BeautifulSoup
+
+from db.read_api import get_basic_hero_list
 from model.models import Hero
 from utils.general import get_resources_dir
 
@@ -94,7 +98,35 @@ def create_hero_list_and_make_assignments():
     return hero_list
 
 
+def assign_winrate_dict_to_hero_list(hero_list):
+    def get_full_link(hero_dotabuff_name):
+        return DOTABUFF_ALL_HEROES_LINK + hero_dotabuff_name + DOTABUFF_COUNTERS_LINK_SUFFIX + f'?date={date_param}'
+
+    soup = get_dotabuff_soup(DOTABUFF_ALL_HEROES_LINK + hero_list[0].dotabuff_name + DOTABUFF_COUNTERS_LINK_SUFFIX)
+    # We need to retrieve last patch number
+    date_param = soup.find('div', class_='filter').find_all('option',
+                                                            attrs={'value': lambda val: val.startswith('patch')})
+    date_param = date_param[0]['value']
+
+    hero_dict = {hero.dotabuff_name: hero for hero in hero_list}
+    for hero in hero_list:
+        soup_hero_against = get_dotabuff_soup(get_full_link(hero.dotabuff_name))
+        soup_conters_list = soup_hero_against.find('header', string='Matchups').find_next(
+            'table').find_all('tr', attrs={'data-link-to': True})
+
+        hero.winrate_dict = {}
+        for soup_enemy in soup_conters_list:
+            enemy_name = soup_enemy['data-link-to'].split('/')[-1]
+            enemy_winrate_against = soup_enemy.find_all('td')[2]['data-value']
+            enemy_winrate_against = -float(enemy_winrate_against)
+            # winrate_dict: {Hero: winrate}
+            hero.winrate_dict[hero_dict[enemy_name]] = enemy_winrate_against
+
+    return hero_list
+
+
 if __name__ == '__main__':
     # hero_list = get_list_of_hero_only_names()
     # download_default_images_for_hero_list(hero_list)
-    pass
+    hero_list = get_basic_hero_list()
+    assign_winrate_dict_to_hero_list(hero_list)
