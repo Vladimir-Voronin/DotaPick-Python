@@ -3,7 +3,7 @@ import sqlite3
 import contextlib
 from db.read_api import get_basic_hero_list, get_roles_list
 from parsing.parsing_func import create_hero_list_and_make_assignments, add_general_winrate_info_to_hero_list, \
-    assign_roles_set_for_hero_list
+    assign_roles_set_for_hero_list, assign_winrate_dict_to_hero_list
 from utils.general import get_dotapick_db_file
 
 
@@ -43,7 +43,7 @@ def update_hero_table_general_winrate():
 
 
 def update_role_table():
-    """ Go through all heroes in database and update general winrate. """
+    """ Go through all heroes in database and add new roles to role table. """
 
     hero_list = get_basic_hero_list()
     assign_roles_set_for_hero_list(hero_list)
@@ -59,7 +59,7 @@ def update_role_table():
 
 
 def insert_relations_hero_role_table():
-    """ insert relations to hero_role list from scratch.
+    """ insert relations to hero_role table from scratch.
 
     Before processing hero_role table will be cleaned."""
 
@@ -85,5 +85,41 @@ def insert_relations_hero_role_table():
         conn.commit()
 
 
+def add_heroes_winrate_relations_from_scratch():
+    """ Adding info to heroes_winrate table.
+
+        Table will be cleaned before processing.
+    """
+    hero_list = get_basic_hero_list()
+    assign_winrate_dict_to_hero_list(hero_list)
+
+    with contextlib.closing(sqlite3.connect(get_dotapick_db_file())) as conn:
+        curs = conn.cursor()
+
+        insert_heroes_winrate_sql = """INSERT INTO heroes_winrate (hero_id, hero_id_enemy, winrate, update_date)
+                                       VALUES (?, ?, ?, ?)"""
+        for hero in hero_list:
+            for enemy, winrate in hero.winrate_dict.items():
+                curs.execute(insert_heroes_winrate_sql, (hero.id, enemy.id, winrate, str(datetime.datetime.now())))
+        conn.commit()
+
+
+def update_heroes_winrate_relations():
+    """ Update table heroes_winrate with actual info from dotabuff. """
+
+    hero_list = get_basic_hero_list()
+    assign_winrate_dict_to_hero_list(hero_list)
+
+    with contextlib.closing(sqlite3.connect(get_dotapick_db_file())) as conn:
+        curs = conn.cursor()
+
+        update_heroes_winrate_sql = """UPDATE heroes_winrate SET winrate = ?, update_date = ? 
+                                        WHERE hero_id = ? AND hero_id_enemy = ?"""
+        for hero in hero_list:
+            for enemy, winrate in hero.winrate_dict.items():
+                curs.execute(update_heroes_winrate_sql, (winrate, str(datetime.datetime.now()), hero.id, enemy.id))
+        conn.commit()
+
+
 if __name__ == '__main__':
-    insert_relations_hero_role_table()
+    update_heroes_winrate_relations()
