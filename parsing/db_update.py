@@ -7,13 +7,17 @@ from parsing.parsing_func import create_hero_list_and_make_assignments, add_gene
 from utils.general import get_dotapick_db_file
 
 
-def insert_hero_table_from_scratch():
+def add_hero_table_from_scratch():
     """ Get all heroes from dotabuff and insert them into hero table. """
 
     hero_list = create_hero_list_and_make_assignments()
 
     with contextlib.closing(sqlite3.connect(get_dotapick_db_file())) as conn:
         curs = conn.cursor()
+
+        clean_table_sql = """DELETE FROM hero"""
+        curs.execute(clean_table_sql)
+        conn.commit()
 
         for hero in hero_list:
             curs.execute(
@@ -42,7 +46,7 @@ def update_hero_table_general_winrate():
         conn.commit()
 
 
-def update_role_table():
+def add_roles_in_role_table_from_scratch():
     """ Go through all heroes in database and add new roles to role table. """
 
     hero_list = get_basic_hero_list()
@@ -52,13 +56,18 @@ def update_role_table():
 
     with contextlib.closing(sqlite3.connect(get_dotapick_db_file())) as conn:
         curs = conn.cursor()
+
+        clean_table_sql = """DELETE FROM role"""
+        curs.execute(clean_table_sql)
+        conn.commit()
+
         add_roles_sql = """INSERT INTO role (name) VALUES (?)"""
         for role in all_roles:
             curs.execute(add_roles_sql, (role,))
         conn.commit()
 
 
-def insert_relations_hero_role_table():
+def add_relations_hero_role_table_from_scratch():
     """ insert relations to hero_role table from scratch.
 
     Before processing hero_role table will be cleaned."""
@@ -96,6 +105,10 @@ def add_heroes_winrate_relations_from_scratch():
     with contextlib.closing(sqlite3.connect(get_dotapick_db_file())) as conn:
         curs = conn.cursor()
 
+        clean_table_sql = """DELETE FROM heroes_winrate"""
+        curs.execute(clean_table_sql)
+        conn.commit()
+
         insert_heroes_winrate_sql = """INSERT INTO heroes_winrate (hero_id, hero_id_enemy, winrate, update_date)
                                        VALUES (?, ?, ?, ?)"""
         for hero in hero_list:
@@ -121,5 +134,14 @@ def update_heroes_winrate_relations():
         conn.commit()
 
 
+def update_full_db_from_scratch():
+    """ Clean all data in DB and download data from scratch. """
+
+    add_hero_table_from_scratch()
+    add_roles_in_role_table_from_scratch()
+    add_relations_hero_role_table_from_scratch()
+    add_heroes_winrate_relations_from_scratch()
+
+
 if __name__ == '__main__':
-    update_heroes_winrate_relations()
+    update_full_db_from_scratch()
