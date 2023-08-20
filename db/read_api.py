@@ -23,6 +23,38 @@ def get_basic_hero_list():
     return hero_list
 
 
+def get_complete_hero_list():
+    """ Return hero_list with all necessary attrs included.
+
+        In particular: winrate_dict and roles_set included.
+    """
+
+    hero_list = get_basic_hero_list()
+    hero_d_name_hero_obj_dict = {hero.dotabuff_name: hero for hero in hero_list}
+
+    with contextlib.closing(sqlite3.connect(get_dotapick_db_file())) as conn:
+        curs = conn.cursor()
+
+        pull_roles_out_sql = """SELECT role.name FROM role JOIN hero_role ON role.id = hero_role.role_id
+                                JOIN hero ON hero.id = hero_role.hero_id WHERE hero.id = ?"""
+
+        for hero in hero_list:
+            curs.execute(pull_roles_out_sql, (hero.id,))
+            hero.roles_set = set(role_wrap[0] for role_wrap in curs.fetchall())
+
+        pull_winrate_dict_out_sql = """SELECT h_enemy.dotabuff_name, heroes_winrate.winrate FROM heroes_winrate
+                                       JOIN hero h_self ON h_self.id = heroes_winrate.hero_id
+                                       JOIN hero h_enemy ON h_enemy.id = heroes_winrate.hero_id_enemy
+                                       WHERE h_self.id = ?"""
+
+        for hero in hero_list:
+            curs.execute(pull_winrate_dict_out_sql, (hero.id, ))
+            hero.winrate_dict = {hero_d_name_hero_obj_dict[enemy_winrate_tuple[0]]: enemy_winrate_tuple[1] for
+                                 enemy_winrate_tuple in curs.fetchall()}
+
+    return hero_list
+
+
 def get_roles_list():
     """ Return List[Role] from role table. """
 
@@ -40,3 +72,7 @@ def get_roles_list():
         roles_list.append(Role(id_=role_info[0], name=role_info[1]))
 
     return roles_list
+
+
+if __name__ == '__main__':
+    get_complete_hero_list()
