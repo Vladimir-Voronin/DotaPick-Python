@@ -88,17 +88,18 @@ def assign_roles_set_for_hero_list(hero_list):
 
 
 def create_hero_list_and_make_assignments():
-    """ Create hero_list from scratch and assign all info except winrate_dict and image. """
+    """ Create hero_list from scratch and assign all info except winrate_dict and roles_set. """
 
     hero_list = get_list_of_hero_only_names()
     add_general_winrate_info_to_hero_list(hero_list)
     assign_image_path_for_hero_list(hero_list)
-    assign_roles_set_for_hero_list(hero_list)
 
     return hero_list
 
 
 def assign_winrate_dict_to_hero_list(hero_list):
+    """ Gets winrate matchups from dotabuff and update winrate_dict for Hero objects. """
+
     def get_full_link(hero_dotabuff_name):
         return DOTABUFF_ALL_HEROES_LINK + hero_dotabuff_name + DOTABUFF_COUNTERS_LINK_SUFFIX + f'?date={date_param}'
 

@@ -2,7 +2,7 @@ import datetime
 import unittest
 import sqlite3
 
-from test_.config import DB_COMPLETENESS_TEST_CONST
+from tests.config import DB_COMPLETENESS_TEST_CONST
 from utils.general import get_dotapick_db_file
 
 
