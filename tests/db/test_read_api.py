@@ -2,8 +2,8 @@ import datetime
 import random
 import unittest
 
-from db.read_api import get_basic_hero_list, get_roles_list
-from test_.config import TEST_READ_API_CONST
+from db.read_api import get_basic_hero_list, get_roles_list, get_complete_hero_list
+from tests.config import TEST_READ_API_CONST
 
 
 @unittest.skipIf(TEST_READ_API_CONST is False, "config settings")
@@ -25,6 +25,12 @@ class ReadApiTest(unittest.TestCase):
 
         self.assertTrue(isinstance(role.id, int))
         self.assertTrue(isinstance(role.name, str))
+
+    def test_get_complete_hero_list(self):
+        hero_list = get_complete_hero_list()
+        hero = random.choice(hero_list)
+        self.assertIsInstance(hero.roles_set, set)
+        self.assertIsInstance(hero.winrate_dict, dict)
 
 
 if __name__ == '__main__':
