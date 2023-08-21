@@ -4,8 +4,8 @@ import re
 import unittest
 
 from parsing.parsing_func import get_list_of_hero_only_names, add_general_winrate_info_to_hero_list, \
-    assign_image_path_for_hero_list, assign_roles_set_for_hero_list, create_hero_list_and_make_assignments
-from test_.config import TEST_PARSING_FUNC_CONST
+    assign_image_path_for_hero_list, assign_roles_set_for_hero_list
+from tests.config import TEST_PARSING_FUNC_CONST
 
 
 @unittest.skipIf(TEST_PARSING_FUNC_CONST is False, "config settings")

@@ -13,3 +13,7 @@ def get_resources_dir():
 
 def get_dotapick_db_file():
     return get_root_dir() / Path(r'db/dotapick.db')
+
+
+def get_static_web_server_dir():
+    return get_root_dir() / Path(r'static_web_server')
