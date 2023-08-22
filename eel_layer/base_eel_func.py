@@ -7,24 +7,18 @@ from utils.python_js_converter import convert_hero_list_to_json
 
 
 @eel.expose
-def update_winrates_and_return_hero_list_json():
+def update_winrates_in_db():
     """ Updating DB table hero: general_winrate and table heroes_winrate. """
 
     update_hero_table_general_winrate()
     update_heroes_winrate_relations()
 
-    hero_list = get_complete_hero_list()
-    return convert_hero_list_to_json(hero_list)
-
 
 @eel.expose
-def update_full_db_and_return_new_hero_list_json():
-    """ Clean DB tables, download data from scratch and return hero_list. """
+def update_full_db():
+    """ Clean DB tables, download data from scratch. """
 
     update_full_db_from_scratch()
-
-    hero_list = get_complete_hero_list()
-    return convert_hero_list_to_json(hero_list)
 
 
 @eel.expose
