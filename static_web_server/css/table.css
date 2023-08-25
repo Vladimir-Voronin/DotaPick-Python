@@ -1,0 +1,33 @@
+tr {
+    outline: thin solid;
+}
+th {
+    padding: 3px;
+}
+
+.recommendation-list-table {
+    width: 500px;
+    left: 50px;
+    padding-top: 20px;
+}
+
+.cell-hero-image {
+    width: 70px;
+    height: 45px;
+}
+
+.r-hero-row td{
+    color: red;
+    width: 20%;
+}
+
+.r-hero-row  .positive {
+    color: rgb(0, 199, 0);
+}
+
+.table-jquery {
+    width: 100%;
+    height: 100%;
+    background-color: black;
+}
+
