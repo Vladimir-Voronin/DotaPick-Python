@@ -8,7 +8,7 @@ def get_root_dir():
 
 
 def get_resources_dir():
-    return get_root_dir() / Path('resources')
+    return get_static_web_server_dir() / Path('image/resources')
 
 
 def get_dotapick_db_file():

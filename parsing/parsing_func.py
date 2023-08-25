@@ -7,14 +7,14 @@ from bs4 import BeautifulSoup
 
 from db.read_api import get_basic_hero_list
 from model.models import Hero
-from utils.general import get_resources_dir
+from utils.general import get_resources_dir, get_static_web_server_dir
 
 DOTABUFF_LINK_PREFIX = r"https://dotabuff.com/"
 DOTABUFF_ALL_HEROES_LINK = r"https://dotabuff.com/heroes/"
 DOTABUFF_ALL_HEROES_WINRATE_LINK = "https://dotabuff.com/heroes/winning/"
 DOTABUFF_COUNTERS_LINK_SUFFIX = r"/counters"
 HEADERS = {'User-Agent': 'Mozilla/5.0'}
-IMAGE_DIR = get_resources_dir() / Path('default_hero_images')
+IMAGE_DIR = get_static_web_server_dir() / Path(r'image/resources/default_hero_images')
 
 
 def get_dotabuff_soup(link):
@@ -129,5 +129,5 @@ def assign_winrate_dict_to_hero_list(hero_list):
 if __name__ == '__main__':
     # hero_list = get_list_of_hero_only_names()
     # download_default_images_for_hero_list(hero_list)
-    hero_list = get_basic_hero_list()
-    assign_winrate_dict_to_hero_list(hero_list)
+    hero_list = get_list_of_hero_only_names()
+    download_default_images_for_hero_list(hero_list)

@@ -4,4 +4,4 @@ from utils.general import get_static_web_server_dir
 
 if __name__ == '__main__':
     eel.init(get_static_web_server_dir())
-    eel.start('html/main.html', port=8080, size=(1000, 700), position=(450, 200))
+    eel.start('html/main.html', port=8080, size=(1350, 850), position=(350, 120))

@@ -6,15 +6,17 @@ class Hero {
     name;
     generalWinrate;
     winrateDict;
+    image_path;
     rolesSet;
     visibility;
 
-    constructor(dotabuffName, name, generalWinrate, winrateDict, roles, visibility) {
+    constructor(dotabuffName, name, generalWinrate, winrateDict, imagePath, roles, visibility) {
         this.dotabuffName = dotabuffName;
         this.name = name;
         this.generalWinrate = generalWinrate;
         this.winrateDict = winrateDict;
-        this.roles = roles;
+        this.image_path = imagePath;
+        this.rolesSet = roles;
         this.visibility = visibility;
     }
 }
@@ -26,6 +28,13 @@ class HeroForRecommendationList extends Hero {
     counterWinrate;
     teamCorrectionWinrate;
     additionalWinrate;
+
+    constructor(hero) {
+        super(hero.dotabuffName, hero.name, hero.generalWinrate, hero.winrateDict, hero.imagePath, hero.rolesSet, hero.visibility);
+        this.counterWinrate = 0;
+        this.teamCorrectionWinrate = 0;
+        this.additionalWinrate = 0;
+    }
 
     getFullWinrateSum() {
         return this.generalWinrate + this.counterWinrate + this.teamCorrectionWinrate + this.additionalWinrate;
@@ -57,7 +66,12 @@ class RecommendationList {
     heroList;
 
     constructor(listOfHeroesForRecommendationList) {
-        this.heroList = listOfHeroesForRecommendationList;
+        this.heroList = [];
+
+        for (const hero of listOfHeroesForRecommendationList){
+            const newHeroForRecomList = new HeroForRecommendationList(hero);
+            this.heroList.push(newHeroForRecomList);
+        }
     }
 
     /**
@@ -122,15 +136,18 @@ class RecommendationList {
     }
 
     /**
-     * Disable visibility if role is off, and enable if on.
+     * Update visibility based on neccessary roles.
+     * 
+     * Only heroes which have all roles in set will stay visible.
+     * If empty set pushed to this method, all heroes will be visible.
      *  
      * @param {String} roleName 
      * @param {boolean} isOn 
      */
-    updateVisibilityByRole(roleName, isOn) {
-        for (const hero in this.heroList) {
-            if (hero.rolesSet.has(roleName)) {
-                hero.visibility = isOn === true ? true : false;
+    updateVisibilityByRolesSet(rolesSet) {
+        for (const hero in heroList) {
+            if (isSubSet(hero.rolesSet, rolesSet)) {
+                hero.visibility = true;
             }
         }
     }
