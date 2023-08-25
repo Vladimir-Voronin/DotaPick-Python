@@ -1,14 +1,171 @@
 <!DOCTYPE html>
 
-<head>
+<head lang="un-US">
     <title>DotaPick</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- CSS section -->
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="stylesheet" href="../css/checkbox.css" />
+    <link rel="stylesheet" href="../css/table.css" />
+
+    <!-- JS section -->
     <script type="text/javascript" src="/eel.js"></script>
-    <script type="text/javascript" src="../js/hello.js"></script>
+    <script type="text/javascript" src="../jquery/jquery.js"></script>
+    
+    <script type="text/javascript" src="../js/eel-connection.js" defer></script>
+    <script type="text/javascript" src="../js/model.js" defer></script>
+    <script type="text/javascript" src="../js/ui-control.js" defer></script>
+    <script type="text/javascript" src="../js/innerFunctions.js" defer></script>
+    <script type="text/javascript" src="../js/main.js" defer></script>
 </head>
 
 <body>
-    <h1>
-        DotaPick app!
-    </h1>
-</body>
+    <div class="parametrs-part">
+        <div class="TeamSection" role="section">
+            <div id="ally-indicator" class="team-selection-indicator indicator_on"></div>
+            <div class="team-info">
+                <div class="team-name">
+                    <p class="team-name-font">Your Team</p>
+                </div>
+                <div class="team-heroes">
+                    <div class="hero-in-team">
+                        <img class="hero-image-default" src="../image/unknown_hero.jpg"></img>
+                    </div>
+                    <div class="hero-in-team">
+                        <img class="hero-image-default" src="../image/unknown_hero.jpg"></img>
+                    </div>
+                    <div class="hero-in-team">
+                        <img class="hero-image-default" src="../image/unknown_hero.jpg"></img>
+                    </div>
+                    <div class="hero-in-team">
+                        <img class="hero-image-default" src="../image/unknown_hero.jpg"></img>
+                    </div>
+                    <div class="hero-in-team">
+                        <img class="hero-image-default" src="../image/unknown_hero.jpg"></img>
+                    </div>
+                </div>
+                <div class="team-bottom"></div>
+            </div>
+        </div>
+        <div class="midSection" role="section">
+            <div class="hero-choose-section">
+                <div class="hero-prompt-enter-to-choose">
+                    <p class="hero-prompt-p">Add hero:</p>
+                    <div class="hero-img small-hero">
+                        <img class="hero-image-default" src="../image/unknown_hero.jpg"></img>
+                    </div>
+                    <p class="hero-prompt-p">Press Enter</p>
+                </div>
+                <div class="write-new-hero"></div>
+            </div>
+            <div class="settings-section">
+                <div class="settings-column">
+                    <div class="checkbox-block">
+                        <div class="checkbox-wrapper-2">
+                            <input type="checkbox" class="sc-gJwTLC ikxBAC">
+                            <label class="checkbox-label">Carry</label>
+                        </div>
+                    </div>
+                    <div class="checkbox-block">
+                        <div class="checkbox-wrapper-2">
+                            <input type="checkbox" class="sc-gJwTLC ikxBAC">
+                            <label class="checkbox-label">Support</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="settings-column">
+                    <div class="checkbox-block">
+                        <div class="checkbox-wrapper-2">
+                            <input type="checkbox" class="sc-gJwTLC ikxBAC">
+                            <label class="checkbox-label">Pusher</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
+        <div class="TeamSection">
+            <div id="enemy-indicator" class="team-selection-indicator"></div>
+            <div class="team-info">
+                <div class="team-name">
+                    <p class="team-name-font">Enemy Team</p>
+                </div>
+                <div class="team-heroes">
+                    <div class="hero-in-team">
+                        <img class="hero-image-default" src="../image/unknown_hero.jpg"></img>
+                    </div>
+                    <div class="hero-in-team">
+                        <img class="hero-image-default" src="../image/unknown_hero.jpg"></img>
+                    </div>
+                    <div class="hero-in-team">
+                        <img class="hero-image-default" src="../image/unknown_hero.jpg"></img>
+                    </div>
+                    <div class="hero-in-team">
+                        <img class="hero-image-default" src="../image/unknown_hero.jpg"></img>
+                    </div>
+                    <div class="hero-in-team">
+                        <img class="hero-image-default" src="../image/unknown_hero.jpg"></img>
+                    </div>
+                </div>
+                <div class="team-bottom"></div>
+            </div>
+        </div>
+    </div>
+    <div class="recommendations-part">
+        <div class="general-settings-row">
+            <button class="settings-button">
+                <p>Update winrates from DB</p>
+            </button>
+            <button class="settings-button">
+                <p>Full DB update</p>
+            </button>
+        </div>
+        <div class="heroes-table-header"></div>
+        <div class="heroes-table-row">
+            <table class="recommendation-list-table">
+                <tr class="table-header-row">
+                    <th class="cell-table-header">Hero</th>
+                    <th class="cell-table-header">Result</th>
+                    <th class="cell-table-header">General winrate</th>
+                    <th class="cell-table-header">Matchup</th>
+                    <th class="cell-table-header">Extra points</th>
+                </tr>
+                <tr class="r-hero-row">
+                    <td class="cell-hero-image">
+                        <img class="image-full-block" src="../image/abaddon.jpg"></img>
+                    </td>
+                    <td class="cell-result positive">2</td>
+                    <td class="cell-general-winrate">3</td>
+                    <td class="cell-winrate-against positive">4</td>
+                    <td class="cell-additional-winrate">5</td>
+                </tr>
+            </table>
+        </div>
+        <div class="table-jquery">
+            <table id="myTable" class="display">
+                <thead>
+                    <tr>
+                        <th>Column 1</th>
+                        <th>Column 2</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Row 1 Data 1</td>
+                        <td>Row 1 Data 2</td>
+                    </tr>
+                    <tr>
+                        <td>Row 2 Data 1</td>
+                        <td>Row 2 Data 2</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
