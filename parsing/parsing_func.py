@@ -7,14 +7,15 @@ from bs4 import BeautifulSoup
 
 from db.read_api import get_basic_hero_list
 from model.models import Hero
-from utils.general import get_resources_dir
+from utils.general import get_web_server_resources_dir, get_static_web_server_dir, get_root_dir
 
 DOTABUFF_LINK_PREFIX = r"https://dotabuff.com/"
 DOTABUFF_ALL_HEROES_LINK = r"https://dotabuff.com/heroes/"
 DOTABUFF_ALL_HEROES_WINRATE_LINK = "https://dotabuff.com/heroes/winning/"
 DOTABUFF_COUNTERS_LINK_SUFFIX = r"/counters"
 HEADERS = {'User-Agent': 'Mozilla/5.0'}
-IMAGE_DIR = get_resources_dir() / Path('default_hero_images')
+IMAGE_DIR = get_static_web_server_dir() / Path(r'image/resources/default_hero_images')
+ADDITIONAL_ROLES_DIR = get_root_dir() / Path('resources') / Path('additional_roles')
 
 
 def get_dotabuff_soup(link):
@@ -76,15 +77,26 @@ def assign_image_path_for_hero_list(hero_list):
     """ Add pathes to default images for each hero. """
 
     for hero in hero_list:
-        hero.image_path = IMAGE_DIR / (hero.dotabuff_name + ".jpg")
+        hero.image_path = hero.dotabuff_name + ".jpg"
 
 
 def assign_roles_set_for_hero_list(hero_list):
     """ Add roles to each hero from dotabuff. """
 
     for hero in hero_list:
+        hero.roles_set = set()
+
+    for hero in hero_list:
         soup = get_dotabuff_soup(DOTABUFF_ALL_HEROES_LINK + hero.dotabuff_name)
         hero.roles_set = set(soup.find('h1').find('small').text.split(', '))
+
+    hero_dict = {v.dotabuff_name: v for v in hero_list}
+    for file in ADDITIONAL_ROLES_DIR.iterdir():
+        if file.is_file():
+            with open(file, 'r') as f:
+                for line in f:
+                    if line.strip() in hero_dict.keys():
+                        hero_dict[line.strip()].roles_set.add(f.name.split("\\")[-1])
 
 
 def create_hero_list_and_make_assignments():
@@ -127,7 +139,5 @@ def assign_winrate_dict_to_hero_list(hero_list):
 
 
 if __name__ == '__main__':
-    # hero_list = get_list_of_hero_only_names()
-    # download_default_images_for_hero_list(hero_list)
-    hero_list = get_basic_hero_list()
-    assign_winrate_dict_to_hero_list(hero_list)
+    hero_list = get_list_of_hero_only_names()
+    assign_roles_set_for_hero_list(hero_list)

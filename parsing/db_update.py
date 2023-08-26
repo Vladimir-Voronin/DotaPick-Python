@@ -3,7 +3,8 @@ import sqlite3
 import contextlib
 from db.read_api import get_basic_hero_list, get_roles_list
 from parsing.parsing_func import create_hero_list_and_make_assignments, add_general_winrate_info_to_hero_list, \
-    assign_roles_set_for_hero_list, assign_winrate_dict_to_hero_list
+    assign_roles_set_for_hero_list, assign_winrate_dict_to_hero_list, get_list_of_hero_only_names, \
+    download_default_images_for_hero_list
 from utils.general import get_dotapick_db_file
 
 
@@ -136,6 +137,9 @@ def update_heroes_winrate_relations():
 
 def update_full_db_from_scratch():
     """ Clean all data in DB and download data from scratch. """
+
+    hero_list = get_list_of_hero_only_names()
+    download_default_images_for_hero_list(hero_list)
 
     add_hero_table_from_scratch()
     add_roles_in_role_table_from_scratch()

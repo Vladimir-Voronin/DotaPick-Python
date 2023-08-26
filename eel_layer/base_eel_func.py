@@ -27,3 +27,4 @@ def return_hero_list_from_db_json():
 
     hero_list = get_complete_hero_list()
     return convert_hero_list_to_json(hero_list)
+

@@ -1,14 +1,160 @@
 <!DOCTYPE html>
 
-<head>
+<head lang="un-US">
     <title>DotaPick</title>
-    <script type="text/javascript" src="/eel.js"></script>
-    <script type="text/javascript" src="../js/hello.js"></script>
+
+    <script type="text/javascript" src="../jquery/jquery.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- CSS section -->
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="stylesheet" href="../css/checkbox.css" />
+    <link rel="stylesheet" href="../css/table.css" />
+    <link rel="stylesheet" href="../css/loading.css" />
+
+    <!-- DataTables plugin -->
+    <link rel="stylesheet" href="../plugins/DataTables/datatables.css" />
+
+    <script src="../plugins/DataTables/datatables.js" defer></script>
+    <!-- JS section -->
+    <script type="text/javascript" src="/eel.js" defer></script>
+
+    <script type="text/javascript" src="../js/eel-connection.js" defer></script>
+    <script type="text/javascript" src="../js/model.js" defer></script>
+    <script type="text/javascript" src="../js/ui-control.js" defer></script>
+    <script type="text/javascript" src="../js/innerFunctions.js" defer></script>
+    <script type="text/javascript" src="../js/recommendation-list-control.js" defer></script>
+    <script type="text/javascript" src="../js/utils.js" defer></script>
+
+    <script type="text/javascript" src="../js/main.js" defer></script>
 </head>
 
 <body>
-    <h1>
-        DotaPick app!
-    </h1>
-</body>
+    <div id="ui-block-div" class="block-ui" hidden="true">
+        <div class="center">
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+        </div>
+    </div>
+    <div class="parametrs-part">
+        <div id="ally-team" class="TeamSection" role="section">
+            <div id="ally-indicator" class="team-selection-indicator"></div>
+            <div class="team-info">
+                <div class="team-name">
+                    <p class="team-name-font">Your Team</p>
+                </div>
+                <div class="team-heroes">
+                    <div class="hero-in-team">
+                        <img class="hero-image-default" src="../image/unknown_hero.jpg"></img>
+                    </div>
+                    <div class="hero-in-team">
+                        <img class="hero-image-default" src="../image/unknown_hero.jpg"></img>
+                    </div>
+                    <div class="hero-in-team">
+                        <img class="hero-image-default" src="../image/unknown_hero.jpg"></img>
+                    </div>
+                    <div class="hero-in-team">
+                        <img class="hero-image-default" src="../image/unknown_hero.jpg"></img>
+                    </div>
+                    <div class="hero-in-team">
+                        <img class="hero-image-default" src="../image/unknown_hero.jpg"></img>
+                    </div>
+                </div>
+                <div class="team-bottom"></div>
+            </div>
+        </div>
+        <div class="midSection" role="section">
+            <div class="hero-choose-section">
+                <div class="hero-prompt-enter-to-choose" hidden>
+                    <div class="hero-prompt-div">
+                        <p class="hero-prompt-p">Add hero:</p>
+                        <div class="hero-img small-hero">
+                            <img id="add-hero-img" class="hero-image-default" src="../image/unknown_hero.jpg"></img>
+                        </div>
+                        <p class="hero-prompt-p">Press Enter</p>
 
+                    </div>
+                </div>
+                <div class="write-new-hero-div">
+                    <div class="write-new-hero">
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="settings-section">
+                <div id="roles-any" class="settings-column">
+                    
+                </div>
+                <div id="roles-necessary" class="settings-column">
+                    
+                </div>
+            </div>
+        </div>
+
+        <div id="enemy-team" class="TeamSection">
+            <div id="enemy-indicator" class="team-selection-indicator indicator_on"></div>
+            <div class="team-info">
+                <div class="team-name">
+                    <p class="team-name-font">Enemy Team</p>
+                </div>
+                <div class="team-heroes">
+                    <div class="hero-in-team" data-value="">
+                        <img class="hero-image-default" src="../image/unknown_hero.jpg"></img>
+                    </div>
+                    <div class="hero-in-team">
+                        <img class="hero-image-default" src="../image/unknown_hero.jpg"></img>
+                    </div>
+                    <div class="hero-in-team">
+                        <img class="hero-image-default" src="../image/unknown_hero.jpg"></img>
+                    </div>
+                    <div class="hero-in-team">
+                        <img class="hero-image-default" src="../image/unknown_hero.jpg"></img>
+                    </div>
+                    <div class="hero-in-team">
+                        <img class="hero-image-default" src="../image/unknown_hero.jpg"></img>
+                    </div>
+                </div>
+                <div class="team-bottom"></div>
+            </div>
+        </div>
+    </div>
+    <div class="recommendations-part">
+        <div class="general-settings-row">
+            <button class="settings-button" tabindex="-1">
+                <p>Update winrates from DB</p>
+            </button>
+            <button class="settings-button" tabindex="-1">
+                <p>Full DB update</p>
+            </button>
+        </div>
+
+        <div class="heroes-table-row" tabindex="-1">
+            <table id="recommendation-list-table" class="display stripe row-border order-column">
+                <thead>
+                    <tr>
+                        <th tabindex="-1">Hero</th>
+                        <th>Result</th>
+                        <th>General winrate</th>
+                        <th>Matchup</th>
+                        <th>Extra Points</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="update-table-block">
+            <button class="update-table-button" tabindex="-1">Update table</button>
+        </div>
+    </div>
+</body>
