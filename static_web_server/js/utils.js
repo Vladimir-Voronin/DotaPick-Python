@@ -1,11 +1,23 @@
 /**
- * check is set_a is a subset of set_b
+ * check is setA is a subset of setB
  */
-isSubSet(set_a, set_b) {
-    for (const elem in set_a) {
-        if (!set_b.has(elem)) {
+function isSubSet(setA, setB) {
+    for (const elem of setA) {
+        if (!setB.has(elem)) {
             return false;
         }
     }
     return true;
+}
+
+/** 
+ * check if at least one elem from setA is in setB
+ */
+function isAnyInSet(setA, setB) {
+    for (const elem of setA) {
+        if (setB.has(elem)) {
+            return true;
+        }
+    }
+    return false;
 }

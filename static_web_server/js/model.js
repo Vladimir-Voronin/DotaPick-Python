@@ -30,7 +30,7 @@ class HeroForRecommendationList extends Hero {
     additionalWinrate;
 
     constructor(hero) {
-        super(hero.dotabuffName, hero.name, hero.generalWinrate, hero.winrateDict, hero.imagePath, hero.rolesSet, hero.visibility);
+        super(hero.dotabuffName, hero.name, hero.generalWinrate, hero.winrateDict, hero.image_path, hero.rolesSet, hero.visibility);
         this.counterWinrate = 0;
         this.teamCorrectionWinrate = 0;
         this.additionalWinrate = 0;
@@ -68,7 +68,7 @@ class RecommendationList {
     constructor(listOfHeroesForRecommendationList) {
         this.heroList = [];
 
-        for (const hero of listOfHeroesForRecommendationList){
+        for (const hero of listOfHeroesForRecommendationList) {
             const newHeroForRecomList = new HeroForRecommendationList(hero);
             this.heroList.push(newHeroForRecomList);
         }
@@ -87,7 +87,9 @@ class RecommendationList {
      * @param {Hero} enemyHero 
      */
     newEnemyRecalculation(enemyHero) {
-
+        for (const hero of this.heroList) {
+            hero.counterWinrate += hero.winrateDict[enemyHero.dotabuffName];
+        }
     }
 
     /**
@@ -135,6 +137,54 @@ class RecommendationList {
 
     }
 
+    #allSubWinratesToZero() {
+        for (const hero of this.heroList) {
+            hero.counterWinrate = 0;
+            hero.teamCorrectionWinrate = 0;
+            hero.additionalWinrate = 0;
+        }
+    }
+
+    fullRecalculation(allyTeam, enemyTeam) {
+        this.#allSubWinratesToZero();
+
+        for (const enemy of enemyTeam.heroesInTeam) {
+            this.newEnemyRecalculation(enemy);
+        }
+
+        for (const ally of allyTeam.heroesInTeam) {
+            this.newAllyRecalculation(ally);
+        }
+    }
+
+    updateVisibility(teamAlly, teamEnemy, rolesIncludeSet, rolesNecessarySet) {
+        for (const hero of this.heroList) {
+            hero.visibility = true;
+        }
+
+        for (const hero of this.heroList) {
+            for (const ally of teamAlly.heroesInTeam) {
+                if (hero.dotabuffName === ally.dotabuffName) {
+                    hero.visibility = false;
+                }
+            }
+
+            for (const enemy of teamEnemy.heroesInTeam) {
+                if (hero.dotabuffName === enemy.dotabuffName) {
+                    hero.visibility = false;
+                }
+            }
+
+            if (!isSubSet(rolesNecessarySet, hero.rolesSet)) {
+                hero.visibility = false;
+            }
+
+            if (!isAnyInSet(rolesIncludeSet, hero.rolesSet)) {
+                hero.visibility = false;
+            }
+        }
+    }
+
     /**
      * Update visibility based on neccessary roles.
      * 
@@ -159,14 +209,14 @@ class RecommendationList {
  * @property {Array} heroesInTeam
  */
 class Team {
-    heroesInTeam;
+    heroesInTeam = [];
     #maxHeroesInTeam = 5;
 
     addHero(hero) {
         if (this.heroesInTeam.length >= this.#maxHeroesInTeam) {
             throw new Error(`Trying add hero to full team (maximum heroes in team: ${this.#maxHeroesInTeam})`);
         }
-        this.heroesInTeam.addHero(hero);
+        this.heroesInTeam.push(hero);
     }
 
     removeHero(hero) {
@@ -174,7 +224,8 @@ class Team {
             throw new Error(`Trying remove non-existent hero.`);
         }
 
-        this.heroesInTeam.remove(hero);
+        const indexToDelete = this.heroesInTeam.indexOf(hero);
+        this.heroesInTeam.splice(indexToDelete, 1);
     }
 
     isFull() {

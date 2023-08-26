@@ -41,3 +41,29 @@ function initMainPageObjects() {
         });
 }
 
+function changeCurrentTeamObject(newTeam) {
+    mainObjects.currentTeam = newTeam;
+}
+
+function changeCurrentTeamUIObject(newTeamUI) {
+    mainObjects.currentTeamUI = newTeamUI;
+}
+
+function updateVisibilitiesForDoublicates() {
+    for (const hero of mainObjects.heroList) {
+        hero.visibility = true;
+    }
+
+    for (const hero of mainObjects.heroList) {
+        for (const heroInTeam of mainObjects.teamAlly.heroesInTeam) {
+            if (hero === heroInTeam) {
+                hero.visibility = false;
+            }
+        }
+        for (const heroInTeam of mainObjects.teamEnemy.heroesInTeam) {
+            if (hero === heroInTeam) {
+                hero.visibility = false;
+            }
+        }
+    }
+}
