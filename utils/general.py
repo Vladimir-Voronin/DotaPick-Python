@@ -7,7 +7,7 @@ def get_root_dir():
     return Path(__file__).parent.parent
 
 
-def get_resources_dir():
+def get_web_server_resources_dir():
     return get_static_web_server_dir() / Path('image/resources')
 
 
