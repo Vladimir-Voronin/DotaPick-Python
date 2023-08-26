@@ -1,8 +1,15 @@
 const mainObjects = {
     heroList: [],
-    recommendationList: 0,
+    recommendationList: null,
     teamAlly: new Team(),
-    teamEnemy: new Team()
+    teamEnemy: new Team(),
+    currentTeam: null,
+    currentTeamUI: null,
+    heroToAdd: null,
+    rolesAnySet: new Set(),
+    rolesNecessarySet: new Set(),
+    updateAuto: true,
+    blockWhenUpdate: false
 }
 
 function initMainPageObjects() {
