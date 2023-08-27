@@ -1,3 +1,6 @@
+/**
+ * Create recommendation table based on 'DataTables' plugin.
+ */
 function initRecommendationTable() {
     $("#recommendation-list-table").DataTable({
         paging: false,
@@ -35,17 +38,20 @@ $(document).ready(() => {
     initRecommendationTable();
 });
 
-function addNewRow() {
-
-}
-
+/**
+ * Removing data from recommendation table and updating its view.
+ */
 function clearRecommendationTable() {
     table = $("#recommendation-list-table").DataTable();
     table.clear().draw();
 }
 
+// Dir with default hero images (by dotabuffName).
 defaultHeroImagesPath = "../image/resources/default_hero_images/"
 
+/** 
+ * Updating recommendation table based on recommendationList.
+ */
 function updateRecommendationTable() {
     dataArray = [];
     for (const hero of mainObjects.recommendationList.heroList) {
@@ -70,6 +76,9 @@ function updateRecommendationTable() {
     table.draw();
 }
 
+/**
+ * Calls full update inside mainObjects.recommendationList instance and updating recommendation talbe after.
+ */
 function makeRecalculationAndUpdateTable() {
     mainObjects.recommendationList.fullRecalculation(mainObjects.teamAlly, mainObjects.teamEnemy);
     mainObjects.recommendationList.updateVisibility(
@@ -78,6 +87,6 @@ function makeRecalculationAndUpdateTable() {
         mainObjects.rolesAnySet,
         mainObjects.rolesNecessarySet
     )
+    
     updateRecommendationTable();
-
 }

@@ -1,3 +1,15 @@
+/**
+ * @property {Array} heroList General hero list. Used to find new heroes and adding them to teams.
+ * @property {RecommendationList} recommendationList hero list of HeroForRecommendationList Objects. Used to work with recommendation list table.
+ * @property {Team} teamAlly Represents ally team (with heroes inside).
+ * @property {Team} teamEnemy Represents enemy team (with heroes inside).
+ * @property {Team} currentTeam Represents currently selected team. (This behavior implements by UI).
+ * @property {Hero} heroToAdd Current hero which can be added to currently selected team.
+ * @property {Set} rolesAnySet Set() which has been formed by roles (from settings) which should be shown in recommendation list if any of roles is matching a specific hero.
+ * @property {Set} rolesNecessarySet Set() which has been formed by roles (from settings) which should be shown in recommendation list if all roles is matching roles of a specific hero.
+ * @property {boolean} updateAuto Controls the ability of recommendation list to update when anything affecting it changes. (F. e. Settings or new heroes in teams). 
+ * @property {boolean} blockWhenUpdate Controls the behavior of UI when recommendation list is updating.
+ */
 const mainObjects = {
     heroList: [],
     recommendationList: null,
@@ -11,6 +23,9 @@ const mainObjects = {
     blockWhenUpdate: false
 }
 
+/**
+ * Initializing function. Define general variable related to main page, call bindings and UI settings.
+ */
 function initMainPageObjects() {
     console.log("loading page...");
     blockUI("init main objects.")
@@ -36,11 +51,20 @@ function initMainPageObjects() {
         });
 }
 
+/**
+ * change currentTeam to selected team. 
+ * @param {Team} newTeam 
+ */
 function changeCurrentTeamObject(newTeam) {
     mainObjects.currentTeam = newTeam;
 }
 
 
+/**
+ * Updating visibility of mainObjects.heroList in order to except doublicates in teams. 
+ * 
+ * This function doesn't change visibility of heroes in recommendationList.
+ */
 function updateVisibilitiesForDoublicates() {
     for (const hero of mainObjects.heroList) {
         hero.visibility = true;
