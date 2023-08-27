@@ -4,7 +4,6 @@ const mainObjects = {
     teamAlly: new Team(),
     teamEnemy: new Team(),
     currentTeam: null,
-    currentTeamUI: null,
     heroToAdd: null,
     rolesAnySet: new Set(),
     rolesNecessarySet: new Set(),
@@ -25,10 +24,7 @@ function initMainPageObjects() {
             mainObjects.recommendationList = new RecommendationList(heroList);
             
             changeCurrentTeamObject(mainObjects.teamEnemy);
-            changeCurrentTeamUIObject(getEnemyTeamUI());
-            
             updateRecommendationTable();
-            
             fillMainPage();
             
             keyBindingsInit();
@@ -36,7 +32,6 @@ function initMainPageObjects() {
 
 
             console.log("Page has loaded, mainObjects have been initialized");
-            console.log(mainObjects.recommendationList);
             unblockUI();
         });
 }
@@ -45,9 +40,6 @@ function changeCurrentTeamObject(newTeam) {
     mainObjects.currentTeam = newTeam;
 }
 
-function changeCurrentTeamUIObject(newTeamUI) {
-    mainObjects.currentTeamUI = newTeamUI;
-}
 
 function updateVisibilitiesForDoublicates() {
     for (const hero of mainObjects.heroList) {
