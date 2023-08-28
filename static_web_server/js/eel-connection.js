@@ -27,13 +27,13 @@ async function getCurrentHeroListFromDB() {
  */
 async function updateFullDB() {
     const update = await eel.update_full_db();
-    return update;
+    return update();
 }
 
 /**
  * Updating winrates in DB.
  */
 async function updateWinratesInDB() {
-    const update = await eel.updateWinratesInDB();
-    return update;
+    const update = await eel.update_winrates_in_db();
+    return update();
 }

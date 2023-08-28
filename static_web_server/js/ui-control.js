@@ -6,6 +6,7 @@
  * @param {boolean} display  Show reason on screen or not.
  */
 function blockUI(reason, display = false) {
+    mainObjects.isBlockedUI = true;
     $("#ui-block-div").show();
 }
 
@@ -13,6 +14,7 @@ function blockUI(reason, display = false) {
  * hide loading page - unblock UI.
  */
 function unblockUI() {
+    mainObjects.isBlockedUI = false;
     $("#ui-block-div").hide();
 }
 
@@ -218,10 +220,12 @@ function bindHeroesFromTeamRemove() {
  */
 function keyBindingAddHeroToTeam() {
     $(document).keydown(function (e) {
-        // Enter
-        if (e.keyCode === 13) {
-            e.preventDefault();
-            addHeroToTeam();
+        if (!mainObjects.isBlockedUI) {
+            // Enter
+            if (e.keyCode === 13) {
+                e.preventDefault();
+                addHeroToTeam();
+            }
         }
     });
 }
@@ -238,32 +242,37 @@ function clearWritePanel() {
  */
 function keyBindingsWriteNewHero() {
     $(document).keydown(function (e) {
-        // From A to Z
-        if ((e.keyCode >= 65 && e.keyCode <= 90)) {
-            getNewHeroWritePanel().append(String.fromCharCode(`${e.which}`).toLocaleLowerCase());
-            checkIfThereIsHeroToAdd();
-        }
-        // -
-        else if (e.keyCode === 189) {
-            getNewHeroWritePanel().append('-');
-            checkIfThereIsHeroToAdd();
-        }
-        // '
-        else if (e.keyCode === 222) {
-            getNewHeroWritePanel().append("'");
-            checkIfThereIsHeroToAdd();
-        }
-        // Space
-        else if (e.keyCode === 32) {
-            getNewHeroWritePanel().append(" ");
-            checkIfThereIsHeroToAdd();
+
+        if (!mainObjects.isBlockedUI) {
+            // From A to Z
+            if ((e.keyCode >= 65 && e.keyCode <= 90)) {
+                getNewHeroWritePanel().append(String.fromCharCode(`${e.which}`).toLocaleLowerCase());
+                checkIfThereIsHeroToAdd();
+            }
+            // -
+            else if (e.keyCode === 189) {
+                getNewHeroWritePanel().append('-');
+                checkIfThereIsHeroToAdd();
+            }
+            // '
+            else if (e.keyCode === 222) {
+                getNewHeroWritePanel().append("'");
+                checkIfThereIsHeroToAdd();
+            }
+            // Space
+            else if (e.keyCode === 32) {
+                getNewHeroWritePanel().append(" ");
+                checkIfThereIsHeroToAdd();
+            }
         }
     });
 
     $(document).keydown(function (e) {
-        if (e.keyCode === 8) {
-            clearWritePanel();
-            checkIfThereIsHeroToAdd();
+        if (!mainObjects.isBlockedUI) {
+            if (e.keyCode === 8) {
+                clearWritePanel();
+                checkIfThereIsHeroToAdd();
+            }
         }
     })
 }
@@ -274,9 +283,11 @@ function keyBindingsWriteNewHero() {
 function keyBindingsInit() {
     // Tab
     $(document).keydown(function (e) {
-        if (e.keyCode === 9) {
-            e.preventDefault();
-            changeTeam();
+        if (!mainObjects.isBlockedUI) {
+            if (e.keyCode === 9) {
+                e.preventDefault();
+                changeTeam();
+            }
         }
     });
 
@@ -297,11 +308,59 @@ function bindUpdateTableButton() {
 }
 
 /**
+ * Block UI and updating winrates in DB, then reload page to get actual data.
+ */
+function updateWinratesInDBStarts() {
+    blockUI();
+
+    setTimeout(() => {
+        const promise = updateWinratesInDB();
+
+        promise.then(() => {
+            location.reload();
+            unblockUI();
+        })
+    }, 10);
+}
+
+/**
+ * Block UI and updating full DB, then reload page to get actual data.
+ */
+function updateFullDBStarts() {
+    blockUI();
+
+    setTimeout(() => {
+        const promise = updateFullDB();
+
+        promise.then(() => {
+            location.reload();
+            unblockUI();
+        })
+    }, 10);
+}
+
+/**
+ * Bind button for updating winrates in DB
+ */
+function bindUpdateWinratesFromDBButton() {
+    $("#update-winrates-button").on('click', updateWinratesInDBStarts);
+}
+
+/**
+ * Bind button for updating full DB
+ */
+function bindUpdateFullDBButton() {
+    $("#update-full-db-button").on('click', updateFullDBStarts);
+}
+
+/**
  * UI bindings.
  */
 function UIBindings() {
     bindHeroesFromTeamRemove();
     bindUpdateTableButton();
+    bindUpdateWinratesFromDBButton();
+    bindUpdateFullDBButton();
 }
 
 /**
