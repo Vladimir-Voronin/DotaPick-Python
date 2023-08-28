@@ -10,15 +10,21 @@ from utils.python_js_converter import convert_hero_list_to_json
 def update_winrates_in_db():
     """ Updating DB table hero: general_winrate and table heroes_winrate. """
 
+    print("starts...")
     update_hero_table_general_winrate()
     update_heroes_winrate_relations()
+    print("stop...")
+    return True
 
 
 @eel.expose
 def update_full_db():
     """ Clean DB tables, download data from scratch. """
 
+    print("full db update starts...")
     update_full_db_from_scratch()
+    print("full db update ends")
+    return True
 
 
 @eel.expose

@@ -308,11 +308,59 @@ function bindUpdateTableButton() {
 }
 
 /**
+ * Block UI and updating winrates in DB, then reload page to get actual data.
+ */
+function updateWinratesInDBStarts() {
+    blockUI();
+
+    setTimeout(() => {
+        const promise = updateWinratesInDB();
+
+        promise.then(() => {
+            location.reload();
+            unblockUI();
+        })
+    }, 10);
+}
+
+/**
+ * Block UI and updating full DB, then reload page to get actual data.
+ */
+function updateFullDBStarts() {
+    blockUI();
+
+    setTimeout(() => {
+        const promise = updateFullDB();
+
+        promise.then(() => {
+            location.reload();
+            unblockUI();
+        })
+    }, 10);
+}
+
+/**
+ * Bind button for updating winrates in DB
+ */
+function bindUpdateWinratesFromDBButton() {
+    $("#update-winrates-button").on('click', updateWinratesInDBStarts);
+}
+
+/**
+ * Bind button for updating full DB
+ */
+function bindUpdateFullDBButton() {
+    $("#update-full-db-button").on('click', updateFullDBStarts);
+}
+
+/**
  * UI bindings.
  */
 function UIBindings() {
     bindHeroesFromTeamRemove();
     bindUpdateTableButton();
+    bindUpdateWinratesFromDBButton();
+    bindUpdateFullDBButton();
 }
 
 /**
