@@ -1,6 +1,7 @@
 /**
  * @property {Array} heroList General hero list. Used to find new heroes and adding them to teams.
  * @property {RecommendationList} recommendationList hero list of HeroForRecommendationList Objects. Used to work with recommendation list table.
+ * @property {Dict} recommendationDictByDotabuffName dictinary [hero.dotabuffName: HeroForRecommendationList]. Very usefull for fast searching by dotabuffName.
  * @property {Team} teamAlly Represents ally team (with heroes inside).
  * @property {Team} teamEnemy Represents enemy team (with heroes inside).
  * @property {Team} currentTeam Represents currently selected team. (This behavior implements by UI).
@@ -13,6 +14,7 @@
 const mainObjects = {
     heroList: [],
     recommendationList: null,
+    recommendationDictByDotabuffName: {},
     teamAlly: new Team(),
     teamEnemy: new Team(),
     currentTeam: null,
@@ -24,7 +26,7 @@ const mainObjects = {
 }
 
 /**
- * Initializing function. Define general variable related to main page, call bindings and UI settings.
+ * Initializing function. Defines general variables related to main page, calls bindings and UI settings.
  */
 function initMainPageObjects() {
     console.log("loading page...");
@@ -35,13 +37,12 @@ function initMainPageObjects() {
     const promiseCurrentList = getCurrentHeroListFromDB();
     promiseCurrentList
         .then(heroList => {
-            mainObjects.heroList = heroList;
-            mainObjects.recommendationList = new RecommendationList(heroList);
-            
+            setMainObjectsHeroListRelated(heroList);
+
             changeCurrentTeamObject(mainObjects.teamEnemy);
             updateRecommendationTable();
             fillMainPage();
-            
+
             keyBindingsInit();
             UIBindings();
 
@@ -49,6 +50,19 @@ function initMainPageObjects() {
             console.log("Page has loaded, mainObjects have been initialized");
             unblockUI();
         });
+}
+
+/**
+ * Settings some mainObjects properties related to heroList.
+ * @param {Array[Hero]} heroList 
+ */
+function setMainObjectsHeroListRelated(heroList) {
+    mainObjects.heroList = heroList;
+    mainObjects.recommendationList = new RecommendationList(heroList);
+    for (const hero of mainObjects.recommendationList.heroList) {
+        mainObjects.recommendationDictByDotabuffName[hero.dotabuffName] = hero;
+    }
+    console.log(mainObjects.recommendationDictByDotabuffName);
 }
 
 /**

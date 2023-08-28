@@ -54,15 +54,12 @@ function changeTeam() {
     if (mainObjects.currentTeam === mainObjects.teamAlly) {
         changeTeamIndicator(mainObjects.teamEnemy);
         changeCurrentTeamObject(mainObjects.teamEnemy);
-        changeCurrentTeamUIObject(getEnemyTeamUI());
     }
     else if (mainObjects.currentTeam === mainObjects.teamEnemy) {
         changeTeamIndicator(mainObjects.teamAlly);
         changeCurrentTeamObject(mainObjects.teamAlly);
-        changeCurrentTeamUIObject(getAllyTeamUI());
     }
 }
-
 
 /**
  * Returns Hero write panel <div>. 
