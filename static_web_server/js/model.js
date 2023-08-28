@@ -10,7 +10,7 @@ class Hero {
     rolesSet;
     visibility;
 
-    constructor(dotabuffName, name, generalWinrate, winrateDict, imagePath, roles, visibility) {
+    constructor(dotabuffName, name, generalWinrate, winrateDict, imagePath, roles, visibility, alliesSet) {
         this.dotabuffName = dotabuffName;
         this.name = name;
         this.generalWinrate = generalWinrate;
@@ -18,6 +18,7 @@ class Hero {
         this.image_path = imagePath;
         this.rolesSet = roles;
         this.visibility = visibility;
+        this.alliesSet = alliesSet;
     }
 }
 
@@ -30,7 +31,7 @@ class HeroForRecommendationList extends Hero {
     additionalWinrate;
 
     constructor(hero) {
-        super(hero.dotabuffName, hero.name, hero.generalWinrate, hero.winrateDict, hero.image_path, hero.rolesSet, hero.visibility);
+        super(hero.dotabuffName, hero.name, hero.generalWinrate, hero.winrateDict, hero.image_path, hero.rolesSet, hero.visibility, hero.alliesSet);
         this.counterWinrate = 0;
         this.teamCorrectionWinrate = 0;
         this.additionalWinrate = 0;
@@ -64,6 +65,7 @@ function compareHeroesByWinrates(a, b) {
  */
 class RecommendationList {
     heroList;
+    allyCorrectionConst = 1.5;
 
     constructor(listOfHeroesForRecommendationList) {
         this.heroList = [];
@@ -89,6 +91,14 @@ class RecommendationList {
     newEnemyRecalculation(enemyHero) {
         for (const hero of this.heroList) {
             hero.counterWinrate += hero.winrateDict[enemyHero.dotabuffName];
+        }
+    }
+
+    newAllyRecalculation(allyHero) {
+        for (const hero of this.heroList) {
+            if (hero.alliesSet.has(allyHero.dotabuffName)) {
+                hero.teamCorrectionWinrate += this.allyCorrectionConst;
+            }
         }
     }
 
