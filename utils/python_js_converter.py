@@ -12,6 +12,7 @@ def convert_hero_list_to_json(hero_list):
         transform_winrate_dict_to_concise_form(hero)
 
         hero.roles_set = tuple(role for role in hero.roles_set)
+        hero.allies_set = tuple(ally for ally in hero.allies_set)
         hero_json = json.dumps(hero.__dict__)
         result.append(hero_json)
 
