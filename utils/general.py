@@ -17,3 +17,6 @@ def get_dotapick_db_file():
 
 def get_static_web_server_dir():
     return get_root_dir() / Path(r'static_web_server')
+
+
+ALLIES_FROM_DOTA_WIKI_FILE_PATH = get_root_dir() / Path(r'resources/allies_info/allies_from_dota_wiki')
