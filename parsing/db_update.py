@@ -144,6 +144,10 @@ def insert_into_ally_table():
     with contextlib.closing(sqlite3.connect(get_dotapick_db_file())) as conn:
         curs = conn.cursor()
 
+        clean_table_sql = """DELETE FROM ally"""
+        curs.execute(clean_table_sql)
+        conn.commit()
+
         insert_ally_sql = """INSERT INTO ally (hero_id, ally_id) VALUES (?, ?)"""
 
         with open(ALLIES_FROM_DOTA_WIKI_FILE_PATH, 'r') as file:
@@ -152,8 +156,6 @@ def insert_into_ally_table():
                 hero_ally = [str_.strip() for str_ in hero_ally]
                 hero = hero_ally[0]
                 allies = hero_ally[1].split(", ")
-                print(hero)
-                print(allies)
                 for ally in allies:
                     curs.execute(insert_ally_sql, (hero_dict[hero], hero_dict[ally]))
         conn.commit()
