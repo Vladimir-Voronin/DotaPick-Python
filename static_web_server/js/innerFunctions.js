@@ -8,6 +8,7 @@
  * @property {Hero} heroToAdd Current hero which can be added to currently selected team.
  * @property {Set} rolesAnySet Set() which has been formed by roles (from settings) which should be shown in recommendation list if any of roles is matching a specific hero.
  * @property {Set} rolesNecessarySet Set() which has been formed by roles (from settings) which should be shown in recommendation list if all roles is matching roles of a specific hero.
+ * @property {boolean} isBlockedUI true if UI us currently blocked.
  * @property {boolean} updateAuto Controls the ability of recommendation list to update when anything affecting it changes. (F. e. Settings or new heroes in teams). 
  * @property {boolean} blockWhenUpdate Controls the behavior of UI when recommendation list is updating.
  */
@@ -21,6 +22,7 @@ const mainObjects = {
     heroToAdd: null,
     rolesAnySet: new Set(),
     rolesNecessarySet: new Set(),
+    isBlockedUI: false,
     updateAuto: true,
     blockWhenUpdate: false
 }

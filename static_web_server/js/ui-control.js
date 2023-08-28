@@ -6,6 +6,7 @@
  * @param {boolean} display  Show reason on screen or not.
  */
 function blockUI(reason, display = false) {
+    mainObjects.isBlockedUI = true;
     $("#ui-block-div").show();
 }
 
@@ -13,6 +14,7 @@ function blockUI(reason, display = false) {
  * hide loading page - unblock UI.
  */
 function unblockUI() {
+    mainObjects.isBlockedUI = false;
     $("#ui-block-div").hide();
 }
 
@@ -218,10 +220,12 @@ function bindHeroesFromTeamRemove() {
  */
 function keyBindingAddHeroToTeam() {
     $(document).keydown(function (e) {
-        // Enter
-        if (e.keyCode === 13) {
-            e.preventDefault();
-            addHeroToTeam();
+        if (!mainObjects.isBlockedUI) {
+            // Enter
+            if (e.keyCode === 13) {
+                e.preventDefault();
+                addHeroToTeam();
+            }
         }
     });
 }
@@ -238,32 +242,37 @@ function clearWritePanel() {
  */
 function keyBindingsWriteNewHero() {
     $(document).keydown(function (e) {
-        // From A to Z
-        if ((e.keyCode >= 65 && e.keyCode <= 90)) {
-            getNewHeroWritePanel().append(String.fromCharCode(`${e.which}`).toLocaleLowerCase());
-            checkIfThereIsHeroToAdd();
-        }
-        // -
-        else if (e.keyCode === 189) {
-            getNewHeroWritePanel().append('-');
-            checkIfThereIsHeroToAdd();
-        }
-        // '
-        else if (e.keyCode === 222) {
-            getNewHeroWritePanel().append("'");
-            checkIfThereIsHeroToAdd();
-        }
-        // Space
-        else if (e.keyCode === 32) {
-            getNewHeroWritePanel().append(" ");
-            checkIfThereIsHeroToAdd();
+
+        if (!mainObjects.isBlockedUI) {
+            // From A to Z
+            if ((e.keyCode >= 65 && e.keyCode <= 90)) {
+                getNewHeroWritePanel().append(String.fromCharCode(`${e.which}`).toLocaleLowerCase());
+                checkIfThereIsHeroToAdd();
+            }
+            // -
+            else if (e.keyCode === 189) {
+                getNewHeroWritePanel().append('-');
+                checkIfThereIsHeroToAdd();
+            }
+            // '
+            else if (e.keyCode === 222) {
+                getNewHeroWritePanel().append("'");
+                checkIfThereIsHeroToAdd();
+            }
+            // Space
+            else if (e.keyCode === 32) {
+                getNewHeroWritePanel().append(" ");
+                checkIfThereIsHeroToAdd();
+            }
         }
     });
 
     $(document).keydown(function (e) {
-        if (e.keyCode === 8) {
-            clearWritePanel();
-            checkIfThereIsHeroToAdd();
+        if (!mainObjects.isBlockedUI) {
+            if (e.keyCode === 8) {
+                clearWritePanel();
+                checkIfThereIsHeroToAdd();
+            }
         }
     })
 }
@@ -274,9 +283,11 @@ function keyBindingsWriteNewHero() {
 function keyBindingsInit() {
     // Tab
     $(document).keydown(function (e) {
-        if (e.keyCode === 9) {
-            e.preventDefault();
-            changeTeam();
+        if (!mainObjects.isBlockedUI) {
+            if (e.keyCode === 9) {
+                e.preventDefault();
+                changeTeam();
+            }
         }
     });
 
