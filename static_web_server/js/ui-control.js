@@ -1,21 +1,41 @@
-function blockUI(reason) {
+/**
+ * calls a loading page that blocks UI.
+ * 
+ * TODO: implement reason display on screen
+ * @param {String} reason  Reason of blocking.
+ * @param {boolean} display  Show reason on screen or not.
+ */
+function blockUI(reason, display = false) {
     $("#ui-block-div").show();
-    console.log(`UI is blocked because of...${reason}`)
 }
 
+/**
+ * hide loading page - unblock UI.
+ */
 function unblockUI() {
     $("#ui-block-div").hide();
-    console.log("UI has been unblocked")
 }
 
+/**
+ * Returns general div of "ally team".
+ * @returns Ally <div>
+ */
 function getAllyTeamUI() {
     return $("#ally-team");
 }
 
+/**
+ * Returns general div of "enemy team". 
+ * @returns Enemy <div>
+ */
 function getEnemyTeamUI() {
     return $("#enemy-team");
 }
 
+/**
+ *  Switch UI indicator (panel) of choosed team.
+ * @param {Team} toTeam  Team to choose 
+ */
 function changeTeamIndicator(toTeam) {
     if (toTeam === mainObjects.teamAlly) {
         $("#ally-indicator").addClass("indicator_on");
@@ -27,6 +47,9 @@ function changeTeamIndicator(toTeam) {
     }
 }
 
+/**
+ * Change currently selected team (In logic and in UI).
+ */
 function changeTeam() {
     if (mainObjects.currentTeam === mainObjects.teamAlly) {
         changeTeamIndicator(mainObjects.teamEnemy);
@@ -40,20 +63,30 @@ function changeTeam() {
     }
 }
 
+
+/**
+ * Returns Hero write panel <div>. 
+ * @returns <div>
+ */
 function getNewHeroWritePanel() {
     return $(".write-new-hero");
 }
 
-function getOnlyOneAvailableHero(strPattern) {
+/**
+ * Returns hero if only one hero is matching the inner string.
+ * @param {String} currentString current state of "hero write panel" 
+ * @returns hero or null
+ */
+function getOnlyOneAvailableHero(currentString) {
     result = [];
     for (const hero of mainObjects.heroList) {
-        if (hero.name.toLowerCase().startsWith(strPattern)) {
+        if (hero.name.toLowerCase().startsWith(currentString)) {
             if (hero.visibility === true) {
                 result.push(hero);
             }
 
             if (result.length > 1) {
-                return false;
+                return null;
             }
         }
     }
@@ -62,6 +95,10 @@ function getOnlyOneAvailableHero(strPattern) {
     }
 }
 
+/**
+ * if there is only one hero that matches the write panel string - change UI and return this hero. 
+ * @returns hero or null
+ */
 function checkIfThereIsHeroToAdd() {
     result = $(".write-new-hero").text();
     hero = getOnlyOneAvailableHero($(".write-new-hero").text());
@@ -78,6 +115,10 @@ function checkIfThereIsHeroToAdd() {
     }
 }
 
+/**
+ * Adding hero to currently selected team if possible. 
+ * @returns null
+ */
 function addHeroToTeam() {
     hero = checkIfThereIsHeroToAdd();
     if (hero) {
@@ -98,6 +139,11 @@ function addHeroToTeam() {
     }
 }
 
+/**
+ * Updating table based on settings and choosed heroes in teams.
+ * 
+ * Can update with UI block and without based on mainObjects.blockWhenUpdate state.
+ */
 function updateTableHandler() {
     if (mainObjects.blockWhenUpdate) {
         blockUI();
@@ -112,14 +158,17 @@ function updateTableHandler() {
     }
 }
 
-const defaultHeroImagePath = "../image/unknown_hero.jpg";
+const defaultHeroImageFilePath = "../image/unknown_hero.jpg";
 
+/**
+ * Show all heroes in teams in UI based on mainObjects.team{Ally}{Enemy}. 
+ */
 function showTeamHeroes() {
     function showSpecificTeamHeroes(team, uiElements) {
         for (let k = 0; k < uiElements.length; k++) {
             const element = uiElements.eq(k);
             element.attr("data-value", "");
-            element.find(".hero-image-default").attr("src", defaultHeroImagePath);
+            element.find(".hero-image-default").attr("src", defaultHeroImageFilePath);
         }
 
         for (let i = 0; i < team.heroesInTeam.length; i++) {
@@ -135,7 +184,12 @@ function showTeamHeroes() {
     showSpecificTeamHeroes(mainObjects.teamEnemy, enemyTeamHeroUIElements);
 }
 
-function deleteHeroFromTeam(team, dotabuffHeroName) {
+/**
+ * Removing hero from team and update table (if auto update is on). 
+ * @param {Team} team 
+ * @param {String} dotabuffHeroName 
+ */
+function removeHeroFromTeam(team, dotabuffHeroName) {
     hero = mainObjects.heroList.find((x) => x.dotabuffName === dotabuffHeroName);
     if (hero) {
         team.removeHero(hero);
@@ -145,16 +199,21 @@ function deleteHeroFromTeam(team, dotabuffHeroName) {
     }
 }
 
-
-function bindHeroesFromTeamDelete() {
+/**
+ * Bind 'click' on heroes from teams to remove them from specific team.
+ */
+function bindHeroesFromTeamRemove() {
     $("#ally-team .hero-in-team").on('click', function (e) {
-        deleteHeroFromTeam(mainObjects.teamAlly, e.currentTarget.dataset.value);
+        removeHeroFromTeam(mainObjects.teamAlly, e.currentTarget.dataset.value);
     });
     $("#enemy-team .hero-in-team").on('click', function (e) {
-        deleteHeroFromTeam(mainObjects.teamEnemy, e.currentTarget.dataset.value);
+        removeHeroFromTeam(mainObjects.teamEnemy, e.currentTarget.dataset.value);
     });
 }
 
+/**
+ * Bind 'Enter' to add hero to currently selected team.
+ */
 function keyBindingAddHeroToTeam() {
     $(document).keydown(function (e) {
         // Enter
@@ -165,10 +224,16 @@ function keyBindingAddHeroToTeam() {
     });
 }
 
+/**
+ * UI clear write panel.
+ */
 function clearWritePanel() {
     getNewHeroWritePanel().empty();
 }
 
+/**
+ * Binds keyboard to work with adding new heroes to teams.
+ */
 function keyBindingsWriteNewHero() {
     $(document).keydown(function (e) {
         // From A to Z
@@ -200,6 +265,10 @@ function keyBindingsWriteNewHero() {
         }
     })
 }
+
+/** 
+ * Binding 'Tab' to switch between selected teams.
+ */
 function keyBindingsInit() {
     // Tab
     $(document).keydown(function (e) {
@@ -213,6 +282,11 @@ function keyBindingsInit() {
     keyBindingAddHeroToTeam();
 }
 
+/**
+ * Bind button on updating recommendation table.
+ * 
+ * Useless if auto update is on. (TODO)
+ */
 function bindUpdateTableButton() {
     $(".update-table-button").on('click', (e) => {
         updateTableHandler();
@@ -220,11 +294,18 @@ function bindUpdateTableButton() {
     });
 }
 
+/**
+ * UI bindings.
+ */
 function UIBindings() {
-    bindHeroesFromTeamDelete();
+    bindHeroesFromTeamRemove();
     bindUpdateTableButton();
 }
 
+/**
+ * Adding setting to mainObjects.rolesAnySet if checkbox is checked. 
+ * @param {DOM} roleUI setting checkbox
+ */
 function checkboxRolesAny(roleUI) {
     if ($(roleUI).is(':checked')) {
         mainObjects.rolesAnySet.add(roleUI.getAttribute("data-value"));
@@ -235,6 +316,10 @@ function checkboxRolesAny(roleUI) {
     updateIfUpdateAuto();
 }
 
+/**
+ * Adding setting to mainObjects.rolesNecessarySet if checkbox is checked. 
+ * @param {DOM} roleUI setting checkbox
+ */
 function checkboxRolesNecessary(roleUI) {
     if ($(roleUI).is(':checked')) {
         mainObjects.rolesNecessarySet.add(roleUI.getAttribute("data-value"));
@@ -246,12 +331,18 @@ function checkboxRolesNecessary(roleUI) {
     updateIfUpdateAuto();
 }
 
+/**
+ * Update recommendation table function (works only if auto update is on).
+ */
 function updateIfUpdateAuto() {
     if (mainObjects.updateAuto === true) {
         updateTableHandler();
     }
 }
 
+/**
+ * Fill settings section with checkbox corresponding to unique roles in heroList.
+ */
 function fillSettingsWithRoles() {
     allRoles = new Set();
 
@@ -287,7 +378,6 @@ function fillSettingsWithRoles() {
     indexToDelete = rolesNecessary.indexOf("Support");
     rolesNecessary.splice(indexToDelete, 1);
 
-    console.log(mainObjects.rolesAnySet);
     for (const role of rolesAny) {
         const appendStr = `<div class="checkbox-block">
                         <div class="checkbox-wrapper-2">
@@ -323,10 +413,16 @@ function fillSettingsWithRoles() {
     }
 }
 
+/**
+ * Fill main page with some data.
+ */
 function fillMainPage() {
     fillSettingsWithRoles();
 }
 
+/** 
+ * Default actions on page before bringing control to user. 
+ */
 function mainPageDefault() {
     clearWritePanel();
     checkIfThereIsHeroToAdd();

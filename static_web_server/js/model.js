@@ -93,50 +93,8 @@ class RecommendationList {
     }
 
     /**
-     * Changing winrates inside recommendation hero list based on new ally.
-     *  
-     * @param {Hero} enemyHero 
+     * Resets all additional properties to default.
      */
-    newAllyRecalculation(allyHero) {
-
-    }
-
-    /**
-    * Changing winrates inside recommendation hero list based on removed enemy.
-    *  
-    * @param {Hero} enemyHero 
-    */
-    removeEnemyRecalculation(enemyHero) {
-
-    }
-
-    /**
-    * Changing winrates inside recommendation hero list based on removed ally.
-    *  
-    * @param {Hero} enemyHero 
-    */
-    removeAllyRecalculation(allyHero) {
-
-    }
-
-    /**
-     * Changing winrates inside recommendation hero list based on a new ally Team.
-     * 
-     * @param {Team} allyTeam 
-     */
-    newAllyTeamRecalculation(allyTeam) {
-
-    }
-
-    /**
-     * Changing winrates inside recommendation hero list based on a new enemy Team.
-     * 
-     * @param {Team} allyTeam 
-     */
-    newEnemyTeamRecalculation(enemyTeam) {
-
-    }
-
     #allSubWinratesToZero() {
         for (const hero of this.heroList) {
             hero.counterWinrate = 0;
@@ -145,6 +103,9 @@ class RecommendationList {
         }
     }
 
+    /**
+     * Recalculate winrates based on heroes from ally team and enemy team.
+     */
     fullRecalculation(allyTeam, enemyTeam) {
         this.#allSubWinratesToZero();
 
@@ -157,6 +118,13 @@ class RecommendationList {
         }
     }
 
+    /**
+     * Update visibility of heroes based on teams and roles settings. 
+     * @param {Team} teamAlly 
+     * @param {Team} teamEnemy 
+     * @param {Set} rolesIncludeSet if any role of hero is matching role from this param - hero will stay shown.
+     * @param {Set} rolesNecessarySet All roles of hero should be in this param in order this hero will be shown.
+     */
     updateVisibility(teamAlly, teamEnemy, rolesIncludeSet, rolesNecessarySet) {
         for (const hero of this.heroList) {
             hero.visibility = true;
