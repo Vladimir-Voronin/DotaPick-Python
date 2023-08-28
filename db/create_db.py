@@ -44,10 +44,21 @@ def create_tables():
             FOREIGN KEY(role_id) REFERENCES role(id)
         )
     """
+
+    table_allies_sql = """
+        CREATE TABLE ally (
+            hero_id INTEGER,
+            ally_id INTEGER,
+            FOREIGN KEY(hero_id) REFERENCES hero(id),
+            FOREIGN KEY(ally_id) REFERENCES hero(id)
+        ) 
+    """
+
     curs.execute(table_hero_sql)
     curs.execute(table_heroes_winrate_sql)
     curs.execute(table_role_sql)
     curs.execute(table_hero_role_sql)
+    curs.execute(table_allies_sql)
 
     conn.close()
 

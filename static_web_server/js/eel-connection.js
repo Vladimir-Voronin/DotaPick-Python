@@ -13,8 +13,7 @@ async function getCurrentHeroListFromDB() {
             for (let heroJson of heroes) {
                 heroJson = JSON.parse(heroJson);
                 hero = new Hero(heroJson.dotabuff_name, heroJson.name, heroJson.general_winrate,
-                    heroJson.winrate_dict, heroJson.image_path,new Set(heroJson.roles_set), true);
-                
+                    heroJson.winrate_dict, heroJson.image_path, new Set(heroJson.roles_set), true, alliesSet = new Set(heroJson.allies_set));
                 heroList.push(hero);
             }
             return heroList;

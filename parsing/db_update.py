@@ -5,7 +5,7 @@ from db.read_api import get_basic_hero_list, get_roles_list
 from parsing.parsing_func import create_hero_list_and_make_assignments, add_general_winrate_info_to_hero_list, \
     assign_roles_set_for_hero_list, assign_winrate_dict_to_hero_list, get_list_of_hero_only_names, \
     download_default_images_for_hero_list
-from utils.general import get_dotapick_db_file
+from utils.general import get_dotapick_db_file, ALLIES_FROM_DOTA_WIKI_FILE_PATH
 
 
 def add_hero_table_from_scratch():
@@ -135,6 +135,30 @@ def update_heroes_winrate_relations():
         conn.commit()
 
 
+def insert_into_ally_table():
+    """ Updating table ally with best allies for every hero. """
+
+    hero_list = get_basic_hero_list()
+
+    hero_dict = {hero.dotabuff_name: hero.id for hero in hero_list}
+    with contextlib.closing(sqlite3.connect(get_dotapick_db_file())) as conn:
+        curs = conn.cursor()
+
+        insert_ally_sql = """INSERT INTO ally (hero_id, ally_id) VALUES (?, ?)"""
+
+        with open(ALLIES_FROM_DOTA_WIKI_FILE_PATH, 'r') as file:
+            for line in file:
+                hero_ally = line.split(":")
+                hero_ally = [str_.strip() for str_ in hero_ally]
+                hero = hero_ally[0]
+                allies = hero_ally[1].split(", ")
+                print(hero)
+                print(allies)
+                for ally in allies:
+                    curs.execute(insert_ally_sql, (hero_dict[hero], hero_dict[ally]))
+        conn.commit()
+
+
 def update_full_db_from_scratch():
     """ Clean all data in DB and download data from scratch. """
 
@@ -145,7 +169,9 @@ def update_full_db_from_scratch():
     add_roles_in_role_table_from_scratch()
     add_relations_hero_role_table_from_scratch()
     add_heroes_winrate_relations_from_scratch()
+    insert_into_ally_table()
 
 
 if __name__ == '__main__':
-    update_full_db_from_scratch()
+    # insert_into_ally_table()
+    pass

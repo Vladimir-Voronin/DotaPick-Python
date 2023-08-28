@@ -80,8 +80,18 @@ body {
 .hero-in-team {
     width: 100%;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+.hero-image-div {
+    margin-top: 27px;
+}
+
+.matchup-hero-info {
+    margin-top: 4px;
+    height: 20px;
 }
 
 .hero-image-default {
@@ -226,10 +236,32 @@ body {
     background-color: purple;
     justify-self: center;
     margin-top: 50px;
-    
+
 }
 
 .update-table-buttpn:focus {
-  outline: none;
-  box-shadow: none;
+    outline: none;
+    box-shadow: none;
+}
+
+.positive-number {
+    color: rgb(0, 223, 0);
+}
+
+.negative-number {
+    color: rgb(255, 32, 32);
+}
+
+.odd:hover {
+    background-color: rgb(15, 0, 43);
+    opacity: .8;
+}
+
+.even:hover {
+    background-color: rgb(15, 0, 43);
+    opacity: .8;
+}
+
+.image-shining {
+    border: solid 5px rgb(0, 217, 255);
 }

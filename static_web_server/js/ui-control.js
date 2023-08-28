@@ -54,15 +54,12 @@ function changeTeam() {
     if (mainObjects.currentTeam === mainObjects.teamAlly) {
         changeTeamIndicator(mainObjects.teamEnemy);
         changeCurrentTeamObject(mainObjects.teamEnemy);
-        changeCurrentTeamUIObject(getEnemyTeamUI());
     }
     else if (mainObjects.currentTeam === mainObjects.teamEnemy) {
         changeTeamIndicator(mainObjects.teamAlly);
         changeCurrentTeamObject(mainObjects.teamAlly);
-        changeCurrentTeamUIObject(getAllyTeamUI());
     }
 }
-
 
 /**
  * Returns Hero write panel <div>. 
@@ -150,11 +147,16 @@ function updateTableHandler() {
 
         setTimeout(() => {
             makeRecalculationAndUpdateTable();
+
+            setHoverTableHeroesHandlers();
+
             unblockUI()
         }, 10);
     }
     else {
         makeRecalculationAndUpdateTable();
+
+        setHoverTableHeroesHandlers();
     }
 }
 
@@ -327,7 +329,6 @@ function checkboxRolesNecessary(roleUI) {
     else {
         mainObjects.rolesNecessarySet.delete(roleUI.getAttribute("data-value"));
     }
-    console.log(mainObjects.rolesNecessarySet);
     updateIfUpdateAuto();
 }
 
@@ -411,6 +412,79 @@ function fillSettingsWithRoles() {
                 checkboxRolesNecessary(this);
             });
     }
+}
+
+/**
+ * Implements behavior of UI when user hovers over hero in table.
+ * 
+ * Supports matchup against enemy team's heroes and pleasant allies.  
+ * @param {JqueryObj} heroInTableUI 
+ */
+function hoverHeroInTableIN(heroInTableUI) {
+    const currentHeroDotabuffName = $(heroInTableUI.currentTarget).find("img").attr("data-value");
+    const currentHero = mainObjects.recommendationDictByDotabuffName[currentHeroDotabuffName];
+
+    $("#enemy-team .team-heroes .hero-in-team").each((index) => {
+        const enemy = $("#enemy-team .team-heroes .hero-in-team").eq(index);
+        const enemyDotabuffName = enemy.attr("data-value");
+        if (enemyDotabuffName) {
+            const winrateOverEnemy = currentHero.winrateDict[enemyDotabuffName];
+            const currentMatchupPanel = $(enemy).find(".matchup-hero-info");
+
+            if (winrateOverEnemy >= 0) {
+                currentMatchupPanel.append(winrateOverEnemy.toFixed(2) + "%");
+                currentMatchupPanel.addClass("positive-number");
+            }
+            else {
+                currentMatchupPanel.append(winrateOverEnemy.toFixed(2) + "%");
+                currentMatchupPanel.addClass("negative-number");
+            }
+        }
+    })
+
+    $("#ally-team .team-heroes .hero-in-team").each((index) => {
+        const ally = $("#ally-team .team-heroes .hero-in-team").eq(index);
+        const allyDotabuffName = ally.attr("data-value");
+        console.log(allyDotabuffName);
+        if (allyDotabuffName) {
+            if (currentHero.alliesSet.has(allyDotabuffName)) {
+                const currentAllyImage = $(ally).find("img");
+
+                currentAllyImage.addClass("image-shining");
+            }
+        }
+    });
+}
+
+/**
+ * Removes UI effects when user hover out from hero in recommendation table. 
+ * @param {JqueryObj} heroInTableUI 
+ */
+function hoverHeroInTableOut(heroInTableUI) {
+    $("#enemy-team .team-heroes .hero-in-team").each((index) => {
+        const enemy = $("#enemy-team .team-heroes .hero-in-team").eq(index);
+        const currentMatchupPanel = $(enemy).find(".matchup-hero-info");
+        currentMatchupPanel.empty();
+        currentMatchupPanel.removeClass("positive-number");
+        currentMatchupPanel.removeClass("negative-number");
+    });
+
+    $("#ally-team .team-heroes .hero-in-team").each((index) => {
+        const ally = $("#ally-team .team-heroes .hero-in-team").eq(index);
+
+        const currentAllyImage = $(ally).find("img");
+        currentAllyImage.removeClass("image-shining");
+    });
+}
+
+/**
+ * Implements behavior of table ui when user hovering over specific hero.
+ * 
+ * Should be called when table's rows refreshed.
+ */
+function setHoverTableHeroesHandlers() {
+    $(".odd").hover(hoverHeroInTableIN, hoverHeroInTableOut);
+    $(".even").hover(hoverHeroInTableIN, hoverHeroInTableOut);
 }
 
 /**

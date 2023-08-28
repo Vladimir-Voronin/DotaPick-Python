@@ -7,7 +7,8 @@ from bs4 import BeautifulSoup
 
 from db.read_api import get_basic_hero_list
 from model.models import Hero
-from utils.general import get_web_server_resources_dir, get_static_web_server_dir, get_root_dir
+from utils.general import get_web_server_resources_dir, get_static_web_server_dir, get_root_dir, \
+    ALLIES_FROM_DOTA_WIKI_FILE_PATH
 
 DOTABUFF_LINK_PREFIX = r"https://dotabuff.com/"
 DOTABUFF_ALL_HEROES_LINK = r"https://dotabuff.com/heroes/"
@@ -138,6 +139,41 @@ def assign_winrate_dict_to_hero_list(hero_list):
     return hero_list
 
 
-if __name__ == '__main__':
+def parse_allies_from_dota_wiki():
+    """ Find best allies for heroes form dota wiki.
+
+        Save allies to specific file (ALLIES_FROM_DOTA_WIKI_FILE_PATH).
+    """
+
+    base_link = r"https://dota2.fandom.com"
+    link_to_hero_page = r"https://dota2.fandom.com/wiki/Dota_2_Wiki"
+    r = requests.get(link_to_hero_page, headers=HEADERS)
+    soup = BeautifulSoup(r.text, 'html.parser')
+
     hero_list = get_list_of_hero_only_names()
-    assign_roles_set_for_hero_list(hero_list)
+
+    hero_dict = {hero.name.lower(): hero.dotabuff_name for hero in hero_list}
+    with open(ALLIES_FROM_DOTA_WIKI_FILE_PATH, "w") as file:
+        for hero_div in soup.find_all(class_="heroentry"):
+            hero_div = hero_div.find("a")
+            hero_name = hero_div["title"]
+
+            r_hero = requests.get(base_link + hero_div["href"] + "/Counters", headers=HEADERS)
+            soup_hero = BeautifulSoup(r_hero.text, 'html.parser')
+            soup_hero = soup_hero.find(id="Works_well_with...").parent
+            all_allies_div = soup_hero.find_all_next("div")
+
+            allies_for_this_hero = []
+            for potential_ally in all_allies_div:
+                ally = potential_ally.find("b")
+                if ally:
+                    allies_for_this_hero.append(ally.find("a")["title"])
+
+            file.write(
+                f"{hero_dict[hero_name.lower()]}: {', '.join([hero_dict[hero.lower()] for hero in allies_for_this_hero])}")
+            file.write("\n")
+
+
+if __name__ == '__main__':
+    # parse_allies_from_dota_wiki()
+    pass

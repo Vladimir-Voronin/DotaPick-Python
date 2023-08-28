@@ -26,7 +26,7 @@ def get_basic_hero_list():
 def get_complete_hero_list():
     """ Return hero_list with all necessary attrs included.
 
-        In particular: winrate_dict and roles_set included.
+        In particular: winrate_dict, roles_set and allies_set included.
     """
 
     hero_list = get_basic_hero_list()
@@ -48,9 +48,17 @@ def get_complete_hero_list():
                                        WHERE h_self.id = ?"""
 
         for hero in hero_list:
-            curs.execute(pull_winrate_dict_out_sql, (hero.id, ))
+            curs.execute(pull_winrate_dict_out_sql, (hero.id,))
             hero.winrate_dict = {hero_d_name_hero_obj_dict[enemy_winrate_tuple[0]]: enemy_winrate_tuple[1] for
                                  enemy_winrate_tuple in curs.fetchall()}
+
+        get_allies_set_sql = """SELECT hero_table_2.dotabuff_name FROM ally JOIN hero hero_table ON
+                                ally.hero_id = hero_table.id JOIN hero hero_table_2 ON ally.ally_id = hero_table_2.id
+                                WHERE hero_table.id = ?"""
+
+        for hero in hero_list:
+            curs.execute(get_allies_set_sql, (hero.id,))
+            hero.allies_set = set((ally[0] for ally in curs.fetchall()))
 
     return hero_list
 
@@ -75,4 +83,4 @@ def get_roles_list():
 
 
 if __name__ == '__main__':
-    get_complete_hero_list()
+    hero_list = get_complete_hero_list()
