@@ -13,4 +13,4 @@ All data is presented on the current patch.
 2) Go to directory where you want to download the app.
 3) use ```git clone "https://github.com/Vladimir-Voronin/DotaPick.git"```
 4) use ```pip install -r DotaPick/requirements.txt``` (or if you open downloaded folder: ```pip install -r requirements.txt```)
-5) Run DotaPick.bat file to run the app. You can also go to "DotaPick" directory and run the app with main.py file or use '''python main.py''' command.
+5) Run ```DotaPick.bat``` file to run the app. You can also go to "DotaPick" directory and run the app with ```main.py``` file or use ```python main.py``` command.
