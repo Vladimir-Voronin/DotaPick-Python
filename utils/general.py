@@ -1,5 +1,9 @@
 from pathlib import Path
 
+import sys
+
+IS_CONVERTING_TO_EXE = False
+
 
 def get_root_dir():
     """ Return root dir of the DotaPick project. """
@@ -12,7 +16,10 @@ def get_web_server_resources_dir():
 
 
 def get_dotapick_db_file():
-    return get_root_dir() / Path(r'db/dotapick.db')
+    if IS_CONVERTING_TO_EXE:
+        return Path(sys.executable).parent / Path('db/dotapick.db')
+    else:
+        return get_root_dir() / Path(r'db/dotapick.db')
 
 
 def get_static_web_server_dir():
