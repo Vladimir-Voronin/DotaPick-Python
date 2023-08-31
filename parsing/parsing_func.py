@@ -7,8 +7,8 @@ from bs4 import BeautifulSoup
 
 from db.read_api import get_basic_hero_list
 from model.models import Hero
-from utils.general import get_web_server_resources_dir, get_static_web_server_dir, get_root_dir, \
-    ALLIES_FROM_DOTA_WIKI_FILE_PATH
+from utils.general import get_web_server_resources_dir, get_static_web_server_dir, \
+    ALLIES_FROM_DOTA_WIKI_FILE_PATH, get_resources_dir
 
 DOTABUFF_LINK_PREFIX = r"https://dotabuff.com/"
 DOTABUFF_ALL_HEROES_LINK = r"https://dotabuff.com/heroes/"
@@ -16,7 +16,7 @@ DOTABUFF_ALL_HEROES_WINRATE_LINK = "https://dotabuff.com/heroes/winning/"
 DOTABUFF_COUNTERS_LINK_SUFFIX = r"/counters"
 HEADERS = {'User-Agent': 'Mozilla/5.0'}
 IMAGE_DIR = get_static_web_server_dir() / Path(r'image/resources/default_hero_images')
-ADDITIONAL_ROLES_DIR = get_root_dir() / Path('resources') / Path('additional_roles')
+ADDITIONAL_ROLES_DIR = get_resources_dir() / Path('additional_roles')
 
 
 def get_dotabuff_soup(link):

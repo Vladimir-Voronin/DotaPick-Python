@@ -3,12 +3,12 @@ import unittest
 from pathlib import Path
 
 from parsing.parsing_func import get_list_of_hero_only_names
-from utils.general import get_root_dir
+from utils.general import get_root_dir, get_resources_dir
 
 
 class ResourcesTest(unittest.TestCase):
     def test_roles_files(self):
-        path_to_additional_roles_files = get_root_dir() / Path("resources/additional_roles")
+        path_to_additional_roles_files = get_resources_dir() / Path("additional_roles")
 
         hero_list = get_list_of_hero_only_names()
 
@@ -19,7 +19,7 @@ class ResourcesTest(unittest.TestCase):
                     self.assertTrue(True if line.strip() in hero_names_set else False, f"{line.strip()}")
 
     def test_allies_info(self):
-        path_to_allies_info = get_root_dir() / Path("resources/allies_info/allies_from_dota_wiki")
+        path_to_allies_info = get_resources_dir() / Path("allies_info/allies_from_dota_wiki")
 
         hero_list = get_list_of_hero_only_names()
 
@@ -36,7 +36,7 @@ class ResourcesTest(unittest.TestCase):
         self.assertEqual(len(hero_names_from_file), len(hero_names_set))
 
     def test_default_hero_images(self):
-        path_to_default_hero_images = get_root_dir() / Path("resources/default_hero_images")
+        path_to_default_hero_images = get_resources_dir() / Path("default_hero_images")
 
         hero_list = get_list_of_hero_only_names()
 
