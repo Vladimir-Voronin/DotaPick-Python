@@ -504,7 +504,6 @@ function hoverHeroInTableIN(heroInTableUI) {
     $("#ally-team .team-heroes .hero-in-team").each((index) => {
         const ally = $("#ally-team .team-heroes .hero-in-team").eq(index);
         const allyDotabuffName = ally.attr("data-value");
-        console.log(allyDotabuffName);
         if (allyDotabuffName) {
             if (currentHero.alliesSet.has(allyDotabuffName)) {
                 const currentAllyImage = $(ally).find("img");

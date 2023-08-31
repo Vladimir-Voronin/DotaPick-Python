@@ -64,7 +64,6 @@ function setMainObjectsHeroListRelated(heroList) {
     for (const hero of mainObjects.recommendationList.heroList) {
         mainObjects.recommendationDictByDotabuffName[hero.dotabuffName] = hero;
     }
-    console.log(mainObjects.recommendationDictByDotabuffName);
 }
 
 /**

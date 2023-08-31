@@ -10,10 +10,10 @@ from utils.python_js_converter import convert_hero_list_to_json
 def update_winrates_in_db():
     """ Updating DB table hero: general_winrate and table heroes_winrate. """
 
-    print("starts...")
+    print("DB winrates update starts...")
     update_hero_table_general_winrate()
     update_heroes_winrate_relations()
-    print("stop...")
+    print("DB winrates update ends...")
     return True
 
 
