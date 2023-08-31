@@ -4,7 +4,7 @@ Download: [HERE](https://github.com/Vladimir-Voronin/DotaPick/releases/tag/dotap
 
 DotaPick is a simple app that helps the user analyze the picking phase in Dota 2.
 
-You can see the overall stats for each hero in the game, pick heroes for the enemy and your team, and see which heroes are best picks and which aren't as good as you thought.
+You can see the overall stats for each hero in the game, choose heroes for the enemy and your team, and see which heroes are best picks and which aren't as good as you thought.
 
 Since Dota API doesn't work well (it requires my money), the hero stats are taken from [dotabuff.com](https://www.dotabuff.com/). Because of that, data is static and you need to press "update DB" button in order to receive some new statistics. It may take some time (depends on your internet connection).
 
