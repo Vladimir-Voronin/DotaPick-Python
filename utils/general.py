@@ -2,7 +2,7 @@ from pathlib import Path
 
 import sys
 
-IS_CONVERTING_TO_EXE = False
+from exe_config import IS_CONVERTING_TO_EXE
 
 
 def get_root_dir():
