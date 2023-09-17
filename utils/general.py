@@ -2,7 +2,7 @@ from pathlib import Path
 
 import sys
 
-IS_CONVERTING_TO_EXE = False
+from exe_config import IS_CONVERTING_TO_EXE
 
 
 def get_root_dir():
@@ -27,6 +27,10 @@ def get_dotapick_db_file():
         return Path(sys.executable).parent / Path('db/dotapick.db')
     else:
         return get_root_dir() / Path(r'db/dotapick.db')
+
+
+def get_recognize_pick_stage_model():
+    return get_resources_dir() / Path("ai_model/HeroTopRecognitionModel.pkl")
 
 
 def get_static_web_server_dir():

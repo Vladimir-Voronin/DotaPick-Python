@@ -1,0 +1,25 @@
+{
+    "parserOptions": {
+        "ecmaVersion": "latest"
+    },
+    "plugins": ["prettier"],
+    "env": {
+        "es6": true
+    },
+    // 0 - disable
+    // 1 - warn
+    // 2 - error
+    "rules": {
+        "semi": 1,
+        "eqeqeq": 1,
+        // prettier settings
+        "prettier/prettier": [
+            "warn",
+            {
+                "singleQuote": true,
+                "endOfLine": "auto",
+                "tabWidth": 4
+            },
+        ],
+    }
+}

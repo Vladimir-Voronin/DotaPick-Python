@@ -1,5 +1,5 @@
 /**
- * Describes hero with general information from db. 
+ * Describes hero with general information from db.
  */
 class Hero {
     dotabuffName;
@@ -10,7 +10,16 @@ class Hero {
     rolesSet;
     visibility;
 
-    constructor(dotabuffName, name, generalWinrate, winrateDict, imagePath, roles, visibility, alliesSet) {
+    constructor(
+        dotabuffName,
+        name,
+        generalWinrate,
+        winrateDict,
+        imagePath,
+        roles,
+        visibility,
+        alliesSet,
+    ) {
         this.dotabuffName = dotabuffName;
         this.name = name;
         this.generalWinrate = generalWinrate;
@@ -23,7 +32,7 @@ class Hero {
 }
 
 /**
- * Contains additional hero properties to form recommendation list. 
+ * Contains additional hero properties to form recommendation list.
  */
 class HeroForRecommendationList extends Hero {
     counterWinrate;
@@ -31,37 +40,50 @@ class HeroForRecommendationList extends Hero {
     additionalWinrate;
 
     constructor(hero) {
-        super(hero.dotabuffName, hero.name, hero.generalWinrate, hero.winrateDict, hero.image_path, hero.rolesSet, hero.visibility, hero.alliesSet);
+        super(
+            hero.dotabuffName,
+            hero.name,
+            hero.generalWinrate,
+            hero.winrateDict,
+            hero.image_path,
+            hero.rolesSet,
+            hero.visibility,
+            hero.alliesSet,
+        );
         this.counterWinrate = 0;
         this.teamCorrectionWinrate = 0;
         this.additionalWinrate = 0;
     }
 
     getFullWinrateSum() {
-        return this.generalWinrate + this.counterWinrate + this.teamCorrectionWinrate + this.additionalWinrate;
+        return (
+            this.generalWinrate +
+            this.counterWinrate +
+            this.teamCorrectionWinrate +
+            this.additionalWinrate
+        );
     }
 }
 
 /**
  * support sort function for heroes from recommendation list.
- *  
- * @param {HeroForRecommendationList} a 
- * @param {HeroForRecommendationList} b 
+ *
+ * @param {HeroForRecommendationList} a
+ * @param {HeroForRecommendationList} b
  */
 function compareHeroesByWinrates(a, b) {
     const a_value = a.getFullWinrateSum();
     const b_value = b.getFullWinrateSum();
     if (a_value < b_value) {
         return -1;
-    }
-    else if (a_value > b_value) {
+    } else if (a_value > b_value) {
         return 1;
     }
     return 0;
 }
 
 /**
- * Implements behavior to manupulate over recommendation hero list. 
+ * Implements behavior to manupulate over recommendation hero list.
  */
 class RecommendationList {
     heroList;
@@ -85,8 +107,8 @@ class RecommendationList {
 
     /**
      * Changing winrates inside recommendation hero list based on new enemy.
-     *  
-     * @param {Hero} enemyHero 
+     *
+     * @param {Hero} enemyHero
      */
     newEnemyRecalculation(enemyHero) {
         for (const hero of this.heroList) {
@@ -129,9 +151,9 @@ class RecommendationList {
     }
 
     /**
-     * Update visibility of heroes based on teams and roles settings. 
-     * @param {Team} teamAlly 
-     * @param {Team} teamEnemy 
+     * Update visibility of heroes based on teams and roles settings.
+     * @param {Team} teamAlly
+     * @param {Team} teamEnemy
      * @param {Set} rolesIncludeSet if any role of hero is matching role from this param - hero will stay shown.
      * @param {Set} rolesNecessarySet All roles of hero should be in this param in order this hero will be shown.
      */
@@ -165,12 +187,12 @@ class RecommendationList {
 
     /**
      * Update visibility based on neccessary roles.
-     * 
+     *
      * Only heroes which have all roles in set will stay visible.
      * If empty set pushed to this method, all heroes will be visible.
-     *  
-     * @param {String} roleName 
-     * @param {boolean} isOn 
+     *
+     * @param {String} roleName
+     * @param {boolean} isOn
      */
     updateVisibilityByRolesSet(rolesSet) {
         for (const hero in heroList) {
@@ -183,7 +205,7 @@ class RecommendationList {
 
 /**
  * Contains heroes in team and limitations;
- * 
+ *
  * @property {Array} heroesInTeam
  */
 class Team {
@@ -192,7 +214,11 @@ class Team {
 
     addHero(hero) {
         if (this.heroesInTeam.length >= this.#maxHeroesInTeam) {
-            throw new Error(`Trying add hero to full team (maximum heroes in team: ${this.#maxHeroesInTeam})`);
+            throw new Error(
+                `Trying add hero to full team (maximum heroes in team: ${
+                    this.#maxHeroesInTeam
+                })`,
+            );
         }
         this.heroesInTeam.push(hero);
     }
