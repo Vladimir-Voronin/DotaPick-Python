@@ -26,3 +26,25 @@ class Role:
 
     def __repr__(self):
         return f"Role: '{self.name}'"
+
+
+class ScreenPickStageParametrs:
+    """ Contains parametrs for specific AxB pixels screenshot.
+
+        Uses to take images of heroes in teams.
+    """
+
+    def __init__(self, height, width, left_team_points, right_team_points):
+        """ team_pointers:
+
+            x..........
+            ........... height
+            ...........
+                width
+
+            x is a point
+        """
+        self.height = height
+        self.width = width
+        self.left_team_points = left_team_points
+        self.right_team_points = right_team_points
