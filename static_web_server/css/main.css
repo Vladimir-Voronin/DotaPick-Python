@@ -225,6 +225,10 @@ body {
     z-index: 1000;
 }
 
+.display-none {
+    display: none !important;
+}
+
 .update-table-block {
     width: 100%;
     height: 100%;
@@ -264,4 +268,36 @@ body {
 
 .image-shining {
     border: solid 5px rgb(0, 217, 255);
+}
+
+.dialog-box {
+    width: 700px;
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    opacity: 100%;
+}
+
+.dialog-message {
+    height: 100%;
+    width: 100%;
+    line-height: 130px;
+    font-size: 20px;
+}
+
+.dialog-answers-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: stretch;
+    width: 100%;
+    height: 100%;
+    line-height: 120px;
+}
+
+.dialog-answer-block {
+    height: 100%;
+    width: 100%;
 }

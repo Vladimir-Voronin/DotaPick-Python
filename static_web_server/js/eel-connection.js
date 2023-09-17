@@ -29,6 +29,20 @@ async function updateFullDB() {
     const update = await eel.update_full_db();
     return update();
 }
+/*
+ * Pick stage recognition through user screenshot.
+ *
+ * Using current screenshot state inside clipboard.
+ */
+async function startPickStageRecognition(myTeamIsLeft) {
+    const result = await eel.start_pick_stage_recognition(myTeamIsLeft);
+
+    const promiseWithJsonInfo = result().then((jsonInfo) => {
+        return jsonInfo;
+    });
+
+    return promiseWithJsonInfo;
+}
 
 /**
  * Updating winrates in DB.

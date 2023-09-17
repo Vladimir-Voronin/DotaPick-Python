@@ -120,22 +120,36 @@ function checkIfThereIsHeroToAdd() {
  */
 function addHeroToTeam() {
     hero = checkIfThereIsHeroToAdd();
-    if (hero) {
-        clearWritePanel();
-        try {
-            mainObjects.currentTeam.addHero(mainObjects.heroToAdd);
-        } catch (error) {
-            console.log(`Error: ${error}`)
-
-            return;
-        }
-        finally {
-            checkIfThereIsHeroToAdd();
-        }
-        showTeamHeroes();
-        updateVisibilitiesForDoublicates();
-        updateIfUpdateAuto();
+    if (!hero) {
+        return;
     }
+    clearWritePanel();
+    try {
+        mainObjects.currentTeam.addHero(mainObjects.heroToAdd);
+    } catch (error) {
+        console.log(`Error: ${error}`);
+
+        return;
+    } finally {
+        checkIfThereIsHeroToAdd();
+    }
+    showTeamHeroes();
+    updateVisibilitiesForDoublicates();
+    updateIfUpdateAuto();
+}
+
+function addHeroToTeamByObject(hero, team) {
+    clearWritePanel();
+    try {
+        team.addHero(hero);
+    } catch (error) {
+        console.log(`Error: ${error}`);
+
+        return;
+    }
+    showTeamHeroes();
+    updateVisibilitiesForDoublicates();
+    updateIfUpdateAuto();
 }
 
 /**
@@ -203,6 +217,18 @@ function removeHeroFromTeam(team, dotabuffHeroName) {
     }
 }
 
+/*
+ * Removing all heroes from teams
+ */
+function removeAllHeroesFromBothTeams() {
+    for (const hero of [...mainObjects.teamAlly.heroesInTeam]) {
+        removeHeroFromTeam(mainObjects.teamAlly, hero.dotabuffName);
+    }
+    for (const hero of [...mainObjects.teamEnemy.heroesInTeam]) {
+        removeHeroFromTeam(mainObjects.teamEnemy, hero.dotabuffName);
+    }
+}
+
 /**
  * Bind 'click' on heroes from teams to remove them from specific team.
  */
@@ -242,8 +268,10 @@ function clearWritePanel() {
  */
 function keyBindingsWriteNewHero() {
     $(document).keydown(function (e) {
-
         if (!mainObjects.isBlockedUI) {
+            if (e.ctrlKey) {
+                return;
+            }
             // From A to Z
             if ((e.keyCode >= 65 && e.keyCode <= 90)) {
                 getNewHeroWritePanel().append(String.fromCharCode(`${e.which}`).toLocaleLowerCase());
@@ -350,7 +378,125 @@ function bindUpdateWinratesFromDBButton() {
  * Bind button for updating full DB
  */
 function bindUpdateFullDBButton() {
-    $("#update-full-db-button").on('click', updateFullDBStarts);
+    $('#update-full-db-button').on('click', updateFullDBStarts);
+}
+
+function closeChooseYourTeamDialog() {
+    $('#my-team-left-recognition').off('click');
+    $('#my-team-right-recognition').off('click');
+    $('#cancel-recognition').off('click');
+
+    $('#ui-block-dialog').empty();
+    $('#ui-block-dialog').hide();
+}
+
+function startRecognition(myTeamIsLeft) {
+    closeChooseYourTeamDialog();
+    blockUI();
+
+    setTimeout(() => {
+        const promise = startPickStageRecognition(myTeamIsLeft);
+
+        promise.then((jsonInfo) => {
+            console.log(jsonInfo);
+            const info = JSON.parse(jsonInfo);
+
+            if (info.error.error_state) {
+                unblockUI();
+                return;
+            }
+            removeAllHeroesFromBothTeams();
+
+            const uniqueHeroes = new Set();
+            for (const heroName of info['ally_team']) {
+                const hero = mainObjects.heroDictByDotabuffName[heroName];
+                if (uniqueHeroes.has(hero)) {
+                    continue;
+                }
+
+                addHeroToTeamByObject(hero, mainObjects.teamAlly);
+                uniqueHeroes.add(hero);
+            }
+
+            for (const heroName of info['enemy_team']) {
+                const hero = mainObjects.heroDictByDotabuffName[heroName];
+                if (uniqueHeroes.has(hero)) {
+                    continue;
+                }
+
+                addHeroToTeamByObject(hero, mainObjects.teamEnemy);
+                uniqueHeroes.add(hero);
+            }
+            unblockUI();
+        });
+    }, 10);
+}
+
+/*
+ * Showing choose your team dialog for recognizing heroes during pick stage.
+ * Also defining some event handlers on buttons inside this dialog.
+ */
+function showChooseYourTeamDialog() {
+    $('#ui-block-dialog').append(
+        `<div class="center">
+            <div class="dialog-box">
+                <div class="dialog-message">Recognition activated. Your team is?</div>
+                <div class="dialog-answers-row">
+                    <div class="dialog-answer-block">
+                        <button id="my-team-left-recognition" class="button-29">
+                            Radiant (left)
+                        </button>
+                    </div>
+                    <div class="dialog-answer-block">
+                        <button id="my-team-right-recognition" class="button-29">
+                            Dire (right)
+                        </button>
+                    </div>
+                    <div class="dialog-answer-block">
+                        <button id="cancel-recognition"  class="button-29">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>`,
+    );
+
+    // events to button
+    $('#my-team-left-recognition').on('click', () => {
+        startRecognition(true);
+    });
+    $('#my-team-right-recognition').on('click', () => {
+        startRecognition(false);
+    });
+    $('#cancel-recognition').on('click', () => {
+        closeChooseYourTeamDialog();
+    });
+    $('#ui-block-dialog').show();
+}
+/*
+ * Getiting screenshot from clipboard and push it to recognize func
+ */
+function bindRecognizeFromClipboardOnPaste() {
+    document.onpaste = (evt) => {
+        const dT = evt.clipboardData || window.clipboardData;
+        const file = dT.files[0];
+        if (!file) {
+            return;
+        }
+        if (!file.type === 'image/png') {
+            return;
+        }
+        if (mainObjects.isBlockedUI) {
+            return;
+        }
+
+        // close current dialog if user paste screenshot while dialog is opened
+        closeChooseYourTeamDialog();
+
+        console.log(file);
+        showChooseYourTeamDialog();
+    };
 }
 
 /**
@@ -361,6 +507,7 @@ function UIBindings() {
     bindUpdateTableButton();
     bindUpdateWinratesFromDBButton();
     bindUpdateFullDBButton();
+    bindRecognizeFromClipboardOnPaste();
 }
 
 /**

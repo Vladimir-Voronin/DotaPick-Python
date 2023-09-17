@@ -9,7 +9,7 @@ bodY {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: #000;
+    background: rgb(0, 0, 0, 0.8);
 }
 
 .wave {

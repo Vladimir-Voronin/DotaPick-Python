@@ -1,5 +1,6 @@
 /**
  * @property {Array} heroList General hero list. Used to find new heroes and adding them to teams.
+ * @property {Dict} heroDictByDotabuffName dictinary [hero.dotabuffName: Hero]. Very usefull for fast searching by dotabuffName.
  * @property {RecommendationList} recommendationList hero list of HeroForRecommendationList Objects. Used to work with recommendation list table.
  * @property {Dict} recommendationDictByDotabuffName dictinary [hero.dotabuffName: HeroForRecommendationList]. Very usefull for fast searching by dotabuffName.
  * @property {Team} teamAlly Represents ally team (with heroes inside).
@@ -14,6 +15,7 @@
  */
 const mainObjects = {
     heroList: [],
+    heroDictByDotabuffName: {},
     recommendationList: null,
     recommendationDictByDotabuffName: {},
     teamAlly: new Team(),
@@ -60,6 +62,10 @@ function initMainPageObjects() {
  */
 function setMainObjectsHeroListRelated(heroList) {
     mainObjects.heroList = heroList;
+    for (const hero of mainObjects.heroList) {
+        mainObjects.heroDictByDotabuffName[hero.dotabuffName] = hero;
+    }
+
     mainObjects.recommendationList = new RecommendationList(heroList);
     for (const hero of mainObjects.recommendationList.heroList) {
         mainObjects.recommendationDictByDotabuffName[hero.dotabuffName] = hero;
