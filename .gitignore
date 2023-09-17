@@ -53,3 +53,8 @@ coverage.xml
 
 # Sphinx documentation
 docs/_build/
+
+# eslint
+node_modules
+package.json
+package-lock.json
