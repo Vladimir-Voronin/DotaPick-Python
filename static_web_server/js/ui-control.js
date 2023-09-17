@@ -1,13 +1,13 @@
 /**
  * calls a loading page that blocks UI.
- * 
+ *
  * TODO: implement reason display on screen
  * @param {String} reason  Reason of blocking.
  * @param {boolean} display  Show reason on screen or not.
  */
 function blockUI(reason, display = false) {
     mainObjects.isBlockedUI = true;
-    $("#ui-block-div").show();
+    $('#ui-block-div').show();
 }
 
 /**
@@ -15,7 +15,7 @@ function blockUI(reason, display = false) {
  */
 function unblockUI() {
     mainObjects.isBlockedUI = false;
-    $("#ui-block-div").hide();
+    $('#ui-block-div').hide();
 }
 
 /**
@@ -23,29 +23,28 @@ function unblockUI() {
  * @returns Ally <div>
  */
 function getAllyTeamUI() {
-    return $("#ally-team");
+    return $('#ally-team');
 }
 
 /**
- * Returns general div of "enemy team". 
+ * Returns general div of "enemy team".
  * @returns Enemy <div>
  */
 function getEnemyTeamUI() {
-    return $("#enemy-team");
+    return $('#enemy-team');
 }
 
 /**
  *  Switch UI indicator (panel) of choosed team.
- * @param {Team} toTeam  Team to choose 
+ * @param {Team} toTeam  Team to choose
  */
 function changeTeamIndicator(toTeam) {
     if (toTeam === mainObjects.teamAlly) {
-        $("#ally-indicator").addClass("indicator_on");
-        $("#enemy-indicator").removeClass("indicator_on");
-    }
-    else {
-        $("#enemy-indicator").addClass("indicator_on");
-        $("#ally-indicator").removeClass("indicator_on");
+        $('#ally-indicator').addClass('indicator_on');
+        $('#enemy-indicator').removeClass('indicator_on');
+    } else {
+        $('#enemy-indicator').addClass('indicator_on');
+        $('#ally-indicator').removeClass('indicator_on');
     }
 }
 
@@ -56,24 +55,23 @@ function changeTeam() {
     if (mainObjects.currentTeam === mainObjects.teamAlly) {
         changeTeamIndicator(mainObjects.teamEnemy);
         changeCurrentTeamObject(mainObjects.teamEnemy);
-    }
-    else if (mainObjects.currentTeam === mainObjects.teamEnemy) {
+    } else if (mainObjects.currentTeam === mainObjects.teamEnemy) {
         changeTeamIndicator(mainObjects.teamAlly);
         changeCurrentTeamObject(mainObjects.teamAlly);
     }
 }
 
 /**
- * Returns Hero write panel <div>. 
+ * Returns Hero write panel <div>.
  * @returns <div>
  */
 function getNewHeroWritePanel() {
-    return $(".write-new-hero");
+    return $('.write-new-hero');
 }
 
 /**
  * Returns hero if only one hero is matching the inner string.
- * @param {String} currentString current state of "hero write panel" 
+ * @param {String} currentString current state of "hero write panel"
  * @returns hero or null
  */
 function getOnlyOneAvailableHero(currentString) {
@@ -95,27 +93,26 @@ function getOnlyOneAvailableHero(currentString) {
 }
 
 /**
- * if there is only one hero that matches the write panel string - change UI and return this hero. 
+ * if there is only one hero that matches the write panel string - change UI and return this hero.
  * @returns hero or null
  */
 function checkIfThereIsHeroToAdd() {
-    result = $(".write-new-hero").text();
-    hero = getOnlyOneAvailableHero($(".write-new-hero").text());
+    result = $('.write-new-hero').text();
+    hero = getOnlyOneAvailableHero($('.write-new-hero').text());
     if (!hero) {
         mainObjects.heroToAdd = null;
-        $(".hero-prompt-div").hide();
-    }
-    else {
+        $('.hero-prompt-div').hide();
+    } else {
         mainObjects.heroToAdd = hero;
-        $("#add-hero-img").attr("src", defaultHeroImagesPath + hero.image_path);
-        $(".hero-prompt-div").show();
+        $('#add-hero-img').attr('src', defaultHeroImagesPath + hero.image_path);
+        $('.hero-prompt-div').show();
 
         return hero;
     }
 }
 
 /**
- * Adding hero to currently selected team if possible. 
+ * Adding hero to currently selected team if possible.
  * @returns null
  */
 function addHeroToTeam() {
@@ -154,7 +151,7 @@ function addHeroToTeamByObject(hero, team) {
 
 /**
  * Updating table based on settings and choosed heroes in teams.
- * 
+ *
  * Can update with UI block and without based on mainObjects.blockWhenUpdate state.
  */
 function updateTableHandler() {
@@ -166,49 +163,55 @@ function updateTableHandler() {
 
             setHoverTableHeroesHandlers();
 
-            unblockUI()
+            unblockUI();
         }, 10);
-    }
-    else {
+    } else {
         makeRecalculationAndUpdateTable();
 
         setHoverTableHeroesHandlers();
     }
 }
 
-const defaultHeroImageFilePath = "../image/unknown_hero.jpg";
+const defaultHeroImageFilePath = '../image/unknown_hero.jpg';
 
 /**
- * Show all heroes in teams in UI based on mainObjects.team{Ally}{Enemy}. 
+ * Show all heroes in teams in UI based on mainObjects.team{Ally}{Enemy}.
  */
 function showTeamHeroes() {
     function showSpecificTeamHeroes(team, uiElements) {
         for (let k = 0; k < uiElements.length; k++) {
             const element = uiElements.eq(k);
-            element.attr("data-value", "");
-            element.find(".hero-image-default").attr("src", defaultHeroImageFilePath);
+            element.attr('data-value', '');
+            element
+                .find('.hero-image-default')
+                .attr('src', defaultHeroImageFilePath);
         }
 
         for (let i = 0; i < team.heroesInTeam.length; i++) {
             const element = team.heroesInTeam[i];
             const s = uiElements.eq(i);
-            uiElements.eq(i).attr("data-value", element.dotabuffName);
-            uiElements.eq(i).find(".hero-image-default").attr("src", defaultHeroImagesPath + element.image_path);
+            uiElements.eq(i).attr('data-value', element.dotabuffName);
+            uiElements
+                .eq(i)
+                .find('.hero-image-default')
+                .attr('src', defaultHeroImagesPath + element.image_path);
         }
     }
-    allyTeamHeroUIElements = $("#ally-team .hero-in-team");
-    enemyTeamHeroUIElements = $("#enemy-team .hero-in-team")
+    allyTeamHeroUIElements = $('#ally-team .hero-in-team');
+    enemyTeamHeroUIElements = $('#enemy-team .hero-in-team');
     showSpecificTeamHeroes(mainObjects.teamAlly, allyTeamHeroUIElements);
     showSpecificTeamHeroes(mainObjects.teamEnemy, enemyTeamHeroUIElements);
 }
 
 /**
- * Removing hero from team and update table (if auto update is on). 
- * @param {Team} team 
- * @param {String} dotabuffHeroName 
+ * Removing hero from team and update table (if auto update is on).
+ * @param {Team} team
+ * @param {String} dotabuffHeroName
  */
 function removeHeroFromTeam(team, dotabuffHeroName) {
-    hero = mainObjects.heroList.find((x) => x.dotabuffName === dotabuffHeroName);
+    hero = mainObjects.heroList.find(
+        (x) => x.dotabuffName === dotabuffHeroName,
+    );
     if (hero) {
         team.removeHero(hero);
         showTeamHeroes();
@@ -233,11 +236,14 @@ function removeAllHeroesFromBothTeams() {
  * Bind 'click' on heroes from teams to remove them from specific team.
  */
 function bindHeroesFromTeamRemove() {
-    $("#ally-team .hero-in-team").on('click', function (e) {
+    $('#ally-team .hero-in-team').on('click', function (e) {
         removeHeroFromTeam(mainObjects.teamAlly, e.currentTarget.dataset.value);
     });
-    $("#enemy-team .hero-in-team").on('click', function (e) {
-        removeHeroFromTeam(mainObjects.teamEnemy, e.currentTarget.dataset.value);
+    $('#enemy-team .hero-in-team').on('click', function (e) {
+        removeHeroFromTeam(
+            mainObjects.teamEnemy,
+            e.currentTarget.dataset.value,
+        );
     });
 }
 
@@ -273,8 +279,10 @@ function keyBindingsWriteNewHero() {
                 return;
             }
             // From A to Z
-            if ((e.keyCode >= 65 && e.keyCode <= 90)) {
-                getNewHeroWritePanel().append(String.fromCharCode(`${e.which}`).toLocaleLowerCase());
+            if (e.keyCode >= 65 && e.keyCode <= 90) {
+                getNewHeroWritePanel().append(
+                    String.fromCharCode(`${e.which}`).toLocaleLowerCase(),
+                );
                 checkIfThereIsHeroToAdd();
             }
             // -
@@ -289,7 +297,7 @@ function keyBindingsWriteNewHero() {
             }
             // Space
             else if (e.keyCode === 32) {
-                getNewHeroWritePanel().append(" ");
+                getNewHeroWritePanel().append(' ');
                 checkIfThereIsHeroToAdd();
             }
         }
@@ -302,10 +310,10 @@ function keyBindingsWriteNewHero() {
                 checkIfThereIsHeroToAdd();
             }
         }
-    })
+    });
 }
 
-/** 
+/**
  * Binding 'Tab' to switch between selected teams.
  */
 function keyBindingsInit() {
@@ -325,11 +333,11 @@ function keyBindingsInit() {
 
 /**
  * Bind button on updating recommendation table.
- * 
+ *
  * Useless if auto update is on. (TODO)
  */
 function bindUpdateTableButton() {
-    $(".update-table-button").on('click', (e) => {
+    $('.update-table-button').on('click', (e) => {
         updateTableHandler();
         e.target.blur();
     });
@@ -347,7 +355,7 @@ function updateWinratesInDBStarts() {
         promise.then(() => {
             location.reload();
             unblockUI();
-        })
+        });
     }, 10);
 }
 
@@ -363,7 +371,7 @@ function updateFullDBStarts() {
         promise.then(() => {
             location.reload();
             unblockUI();
-        })
+        });
     }, 10);
 }
 
@@ -371,7 +379,7 @@ function updateFullDBStarts() {
  * Bind button for updating winrates in DB
  */
 function bindUpdateWinratesFromDBButton() {
-    $("#update-winrates-button").on('click', updateWinratesInDBStarts);
+    $('#update-winrates-button').on('click', updateWinratesInDBStarts);
 }
 
 /**
@@ -511,29 +519,27 @@ function UIBindings() {
 }
 
 /**
- * Adding setting to mainObjects.rolesAnySet if checkbox is checked. 
+ * Adding setting to mainObjects.rolesAnySet if checkbox is checked.
  * @param {DOM} roleUI setting checkbox
  */
 function checkboxRolesAny(roleUI) {
     if ($(roleUI).is(':checked')) {
-        mainObjects.rolesAnySet.add(roleUI.getAttribute("data-value"));
-    }
-    else {
-        mainObjects.rolesAnySet.delete(roleUI.getAttribute("data-value"));
+        mainObjects.rolesAnySet.add(roleUI.getAttribute('data-value'));
+    } else {
+        mainObjects.rolesAnySet.delete(roleUI.getAttribute('data-value'));
     }
     updateIfUpdateAuto();
 }
 
 /**
- * Adding setting to mainObjects.rolesNecessarySet if checkbox is checked. 
+ * Adding setting to mainObjects.rolesNecessarySet if checkbox is checked.
  * @param {DOM} roleUI setting checkbox
  */
 function checkboxRolesNecessary(roleUI) {
     if ($(roleUI).is(':checked')) {
-        mainObjects.rolesNecessarySet.add(roleUI.getAttribute("data-value"));
-    }
-    else {
-        mainObjects.rolesNecessarySet.delete(roleUI.getAttribute("data-value"));
+        mainObjects.rolesNecessarySet.add(roleUI.getAttribute('data-value'));
+    } else {
+        mainObjects.rolesNecessarySet.delete(roleUI.getAttribute('data-value'));
     }
     updateIfUpdateAuto();
 }
@@ -565,8 +571,7 @@ function fillSettingsWithRoles() {
     for (const role of allRoles) {
         if (role.includes('pos')) {
             rolesAny.push(role);
-        }
-        else {
+        } else {
             rolesNecessary.push(role);
         }
     }
@@ -576,13 +581,12 @@ function fillSettingsWithRoles() {
             return -1;
         }
         return 1;
-
-    })
+    });
 
     // Removing "Carry" and "Support" roles
-    let indexToDelete = rolesNecessary.indexOf("Carry");
+    let indexToDelete = rolesNecessary.indexOf('Carry');
     rolesNecessary.splice(indexToDelete, 1);
-    indexToDelete = rolesNecessary.indexOf("Support");
+    indexToDelete = rolesNecessary.indexOf('Support');
     rolesNecessary.splice(indexToDelete, 1);
 
     for (const role of rolesAny) {
@@ -591,15 +595,19 @@ function fillSettingsWithRoles() {
                             <input type="checkbox" class="sc-gJwTLC ikxBAC" data-value="${role}">
                             <label class="checkbox-label">${role}</label>
                         </div>
-                    </div>`
-        $("#roles-any").append(appendStr);
+                    </div>`;
+        $('#roles-any').append(appendStr);
 
-        $(".checkbox-wrapper-2").find(`[data-value='${role}']`)
+        $('.checkbox-wrapper-2')
+            .find(`[data-value='${role}']`)
             .change(function () {
                 checkboxRolesAny(this);
             });
 
-        $(".checkbox-wrapper-2").find(`[data-value='${role}']`).prop('checked', true).trigger("change");
+        $('.checkbox-wrapper-2')
+            .find(`[data-value='${role}']`)
+            .prop('checked', true)
+            .trigger('change');
     }
 
     for (const role of rolesNecessary) {
@@ -608,12 +616,12 @@ function fillSettingsWithRoles() {
                             <input type="checkbox" class="sc-gJwTLC ikxBAC" data-value="${role}">
                             <label class="checkbox-label">${role}</label>
                         </div>
-                    </div>`
+                    </div>`;
 
+        $('#roles-necessary').append(appendStr);
 
-        $("#roles-necessary").append(appendStr);
-
-        $('.checkbox-wrapper-2').find(`[data-value='${role}']`)
+        $('.checkbox-wrapper-2')
+            .find(`[data-value='${role}']`)
             .change(function () {
                 checkboxRolesNecessary(this);
             });
@@ -622,74 +630,76 @@ function fillSettingsWithRoles() {
 
 /**
  * Implements behavior of UI when user hovers over hero in table.
- * 
- * Supports matchup against enemy team's heroes and pleasant allies.  
- * @param {JqueryObj} heroInTableUI 
+ *
+ * Supports matchup against enemy team's heroes and pleasant allies.
+ * @param {JqueryObj} heroInTableUI
  */
 function hoverHeroInTableIN(heroInTableUI) {
-    const currentHeroDotabuffName = $(heroInTableUI.currentTarget).find("img").attr("data-value");
-    const currentHero = mainObjects.recommendationDictByDotabuffName[currentHeroDotabuffName];
+    const currentHeroDotabuffName = $(heroInTableUI.currentTarget)
+        .find('img')
+        .attr('data-value');
+    const currentHero =
+        mainObjects.recommendationDictByDotabuffName[currentHeroDotabuffName];
 
-    $("#enemy-team .team-heroes .hero-in-team").each((index) => {
-        const enemy = $("#enemy-team .team-heroes .hero-in-team").eq(index);
-        const enemyDotabuffName = enemy.attr("data-value");
+    $('#enemy-team .team-heroes .hero-in-team').each((index) => {
+        const enemy = $('#enemy-team .team-heroes .hero-in-team').eq(index);
+        const enemyDotabuffName = enemy.attr('data-value');
         if (enemyDotabuffName) {
             const winrateOverEnemy = currentHero.winrateDict[enemyDotabuffName];
-            const currentMatchupPanel = $(enemy).find(".matchup-hero-info");
+            const currentMatchupPanel = $(enemy).find('.matchup-hero-info');
 
             if (winrateOverEnemy >= 0) {
-                currentMatchupPanel.append(winrateOverEnemy.toFixed(2) + "%");
-                currentMatchupPanel.addClass("positive-number");
-            }
-            else {
-                currentMatchupPanel.append(winrateOverEnemy.toFixed(2) + "%");
-                currentMatchupPanel.addClass("negative-number");
+                currentMatchupPanel.append(winrateOverEnemy.toFixed(2) + '%');
+                currentMatchupPanel.addClass('positive-number');
+            } else {
+                currentMatchupPanel.append(winrateOverEnemy.toFixed(2) + '%');
+                currentMatchupPanel.addClass('negative-number');
             }
         }
-    })
+    });
 
-    $("#ally-team .team-heroes .hero-in-team").each((index) => {
-        const ally = $("#ally-team .team-heroes .hero-in-team").eq(index);
-        const allyDotabuffName = ally.attr("data-value");
+    $('#ally-team .team-heroes .hero-in-team').each((index) => {
+        const ally = $('#ally-team .team-heroes .hero-in-team').eq(index);
+        const allyDotabuffName = ally.attr('data-value');
         if (allyDotabuffName) {
             if (currentHero.alliesSet.has(allyDotabuffName)) {
-                const currentAllyImage = $(ally).find("img");
+                const currentAllyImage = $(ally).find('img');
 
-                currentAllyImage.addClass("image-shining");
+                currentAllyImage.addClass('image-shining');
             }
         }
     });
 }
 
 /**
- * Removes UI effects when user hover out from hero in recommendation table. 
- * @param {JqueryObj} heroInTableUI 
+ * Removes UI effects when user hover out from hero in recommendation table.
+ * @param {JqueryObj} heroInTableUI
  */
 function hoverHeroInTableOut(heroInTableUI) {
-    $("#enemy-team .team-heroes .hero-in-team").each((index) => {
-        const enemy = $("#enemy-team .team-heroes .hero-in-team").eq(index);
-        const currentMatchupPanel = $(enemy).find(".matchup-hero-info");
+    $('#enemy-team .team-heroes .hero-in-team').each((index) => {
+        const enemy = $('#enemy-team .team-heroes .hero-in-team').eq(index);
+        const currentMatchupPanel = $(enemy).find('.matchup-hero-info');
         currentMatchupPanel.empty();
-        currentMatchupPanel.removeClass("positive-number");
-        currentMatchupPanel.removeClass("negative-number");
+        currentMatchupPanel.removeClass('positive-number');
+        currentMatchupPanel.removeClass('negative-number');
     });
 
-    $("#ally-team .team-heroes .hero-in-team").each((index) => {
-        const ally = $("#ally-team .team-heroes .hero-in-team").eq(index);
+    $('#ally-team .team-heroes .hero-in-team').each((index) => {
+        const ally = $('#ally-team .team-heroes .hero-in-team').eq(index);
 
-        const currentAllyImage = $(ally).find("img");
-        currentAllyImage.removeClass("image-shining");
+        const currentAllyImage = $(ally).find('img');
+        currentAllyImage.removeClass('image-shining');
     });
 }
 
 /**
  * Implements behavior of table ui when user hovering over specific hero.
- * 
+ *
  * Should be called when table's rows refreshed.
  */
 function setHoverTableHeroesHandlers() {
-    $(".odd").hover(hoverHeroInTableIN, hoverHeroInTableOut);
-    $(".even").hover(hoverHeroInTableIN, hoverHeroInTableOut);
+    $('.odd').hover(hoverHeroInTableIN, hoverHeroInTableOut);
+    $('.even').hover(hoverHeroInTableIN, hoverHeroInTableOut);
 }
 
 /**
@@ -699,8 +709,8 @@ function fillMainPage() {
     fillSettingsWithRoles();
 }
 
-/** 
- * Default actions on page before bringing control to user. 
+/**
+ * Default actions on page before bringing control to user.
  */
 function mainPageDefault() {
     clearWritePanel();

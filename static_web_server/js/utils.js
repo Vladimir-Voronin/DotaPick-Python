@@ -10,7 +10,7 @@ function isSubSet(setA, setB) {
     return true;
 }
 
-/** 
+/**
  * check if at least one elem from setA is in setB
  */
 function isAnyInSet(setA, setB) {

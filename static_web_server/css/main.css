@@ -219,7 +219,6 @@ body {
 
 .block-ui {
     position: absolute;
-    opacity: 50%;
     height: 100%;
     width: 100%;
     z-index: 1000;
@@ -240,7 +239,6 @@ body {
     background-color: purple;
     justify-self: center;
     margin-top: 50px;
-
 }
 
 .update-table-buttpn:focus {

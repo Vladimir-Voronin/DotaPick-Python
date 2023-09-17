@@ -10,7 +10,7 @@
  * @property {Set} rolesAnySet Set() which has been formed by roles (from settings) which should be shown in recommendation list if any of roles is matching a specific hero.
  * @property {Set} rolesNecessarySet Set() which has been formed by roles (from settings) which should be shown in recommendation list if all roles is matching roles of a specific hero.
  * @property {boolean} isBlockedUI true if UI us currently blocked.
- * @property {boolean} updateAuto Controls the ability of recommendation list to update when anything affecting it changes. (F. e. Settings or new heroes in teams). 
+ * @property {boolean} updateAuto Controls the ability of recommendation list to update when anything affecting it changes. (F. e. Settings or new heroes in teams).
  * @property {boolean} blockWhenUpdate Controls the behavior of UI when recommendation list is updating.
  */
 const mainObjects = {
@@ -26,39 +26,37 @@ const mainObjects = {
     rolesNecessarySet: new Set(),
     isBlockedUI: false,
     updateAuto: true,
-    blockWhenUpdate: false
-}
+    blockWhenUpdate: false,
+};
 
 /**
  * Initializing function. Defines general variables related to main page, calls bindings and UI settings.
  */
 function initMainPageObjects() {
-    console.log("loading page...");
-    blockUI("init main objects.")
+    console.log('loading page...');
+    blockUI('init main objects.');
 
     mainPageDefault();
 
     const promiseCurrentList = getCurrentHeroListFromDB();
-    promiseCurrentList
-        .then(heroList => {
-            setMainObjectsHeroListRelated(heroList);
+    promiseCurrentList.then((heroList) => {
+        setMainObjectsHeroListRelated(heroList);
 
-            changeCurrentTeamObject(mainObjects.teamEnemy);
-            updateRecommendationTable();
-            fillMainPage();
+        changeCurrentTeamObject(mainObjects.teamEnemy);
+        updateRecommendationTable();
+        fillMainPage();
 
-            keyBindingsInit();
-            UIBindings();
+        keyBindingsInit();
+        UIBindings();
 
-
-            console.log("Page has loaded, mainObjects have been initialized");
-            unblockUI();
-        });
+        console.log('Page has loaded, mainObjects have been initialized');
+        unblockUI();
+    });
 }
 
 /**
  * Settings some mainObjects properties related to heroList.
- * @param {Array[Hero]} heroList 
+ * @param {Array[Hero]} heroList
  */
 function setMainObjectsHeroListRelated(heroList) {
     mainObjects.heroList = heroList;
@@ -73,17 +71,16 @@ function setMainObjectsHeroListRelated(heroList) {
 }
 
 /**
- * change currentTeam to selected team. 
- * @param {Team} newTeam 
+ * change currentTeam to selected team.
+ * @param {Team} newTeam
  */
 function changeCurrentTeamObject(newTeam) {
     mainObjects.currentTeam = newTeam;
 }
 
-
 /**
- * Updating visibility of mainObjects.heroList in order to except doublicates in teams. 
- * 
+ * Updating visibility of mainObjects.heroList in order to except doublicates in teams.
+ *
  * This function doesn't change visibility of heroes in recommendationList.
  */
 function updateVisibilitiesForDoublicates() {
