@@ -1,0 +1,16 @@
+create requirments.txt {
+    pip install pipreqs
+    pipreqs /path/to/project
+}
+
+make an .exe {
+    // Change IS_CONVERTING_TO_EXE constant to True in exe_config.py file
+    // go to project dir
+    pip install PyInstaller
+    python -m eel [your_main_script] [your_web_folder] --noconsole --onefile
+    // new dir and file will be created: main.spec, build/, dist/
+    // .exe file will be in dist/ dir.
+    // Copy db and resources dir to dist dir (with .exe file)
+    // App is ready
+}
+
