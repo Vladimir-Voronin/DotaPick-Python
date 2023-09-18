@@ -116,7 +116,7 @@ def update_team(screenshot, update_by_left_pointers, updated_list):
 
         Heroes will be added to updated_list.
     """
-    model = PickStageModel()
+    model = PickStageModel.getInstance()
     current_screen_parametrs = SUPPORTED_SCREENSHOT_RESOULUTIONS[screenshot._size]
     current_pointers = current_screen_parametrs.left_team_points if update_by_left_pointers else current_screen_parametrs.right_team_points
     result = []
