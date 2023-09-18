@@ -1,6 +1,6 @@
 # DotaPick
 
-Download: [HERE](https://github.com/Vladimir-Voronin/DotaPick/releases/tag/dotapick-beta)
+Download: [HERE](https://github.com/Vladimir-Voronin/DotaPick/releases/tag/dotapick)
 
 DotaPick is a simple app that helps the user analyze the picking phase in Dota 2.
 
@@ -12,7 +12,7 @@ All data is presented on the current patch.
 
 ## Installation guide:
 You can download .exe version:
-1) Download link: [HERE](https://github.com/Vladimir-Voronin/DotaPick/releases/tag/dotapick-beta)
+1) Download link: [HERE](https://github.com/Vladimir-Voronin/DotaPick/releases/tag/dotapick)
 2) Simply unzip archive and run ```DotaPick.exe```
 
 Or you can use Python:
