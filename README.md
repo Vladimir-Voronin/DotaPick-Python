@@ -1,6 +1,6 @@
 # DotaPick
 
-Download: [HERE](https://github.com/Vladimir-Voronin/DotaPick/releases/tag/dotapick)
+Download: [HERE](https://github.com/Vladimir-Voronin/DotaPick-Python/releases/tag/dotapick)
 
 DotaPick is a simple app that helps the user analyze the picking phase in Dota 2.
 
